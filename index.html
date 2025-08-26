@@ -58,7 +58,7 @@
                         Contact Us
                     </a>
                     <a href="login.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
-                        Login
+                        logout
                     </a>
                 </nav>
                 
@@ -74,7 +74,7 @@
                 
                 <div class="flex items-center space-x-4">
                     <button onclick="toggleSellModal()" class="bg-accent hover:bg-accent/80 text-white px-4 py-2 rounded-full font-medium transition-colors">
-                        Sell Now
+                        Donate Now
                     </button>
                     <button onclick="toggleCart()" class="relative bg-white/20 hover:bg-white/30 p-2 rounded-full transition-colors">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -123,7 +123,7 @@
                     Shop Now
                 </button>
                 <button onclick="toggleSellModal()" class="bg-accent text-white px-8 py-3 rounded-full font-semibold hover:bg-accent/80 transition-colors">
-                    Start Selling
+                    Start Donating
                 </button>
             </div>
         </div>
@@ -174,7 +174,7 @@
             </div>
             <div class="border-t pt-4">
                 <div class="flex justify-between items-center mb-4">
-                    <span class="font-semibold">Total: $<span id="cartTotal">0.00</span></span>
+                    <span class="font-semibold">Total: ₦<span id="cartTotal">0.00</span></span>
                 </div>
                 <button onclick="checkout()" class="w-full bg-primary hover:bg-primary/80 text-white py-3 rounded-lg font-semibold transition-colors">
                     Checkout
@@ -211,7 +211,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Price (₦)</label>
                     <input type="number" id="productPrice" step="0.01" min="0.01" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
                 <div>
@@ -327,14 +327,14 @@
     <script>
         // Store data management
         let products = JSON.parse(localStorage.getItem('bomass_products')) || [
-            { id: 1, name: "Fresh Organic Apples", category: "food", price: 3.99, description: "Locally grown organic apples", seller: "Green Farm Co.", emoji: "🍎", stock: 50, rating: 4.8, reviews: 24, image: null },
-            { id: 2, name: "Cotton T-Shirt", category: "clothing", price: 12.99, description: "Comfortable cotton t-shirt", seller: "Local Tailor", emoji: "👕", stock: 30, rating: 4.6, reviews: 18, image: null },
-            { id: 3, name: "Smartphone Case", category: "electronics", price: 8.99, description: "Protective phone case", seller: "Tech Accessories", emoji: "📱", stock: 25, rating: 4.7, reviews: 32, image: null },
-            { id: 4, name: "Handmade Soap", category: "home", price: 4.50, description: "Natural handmade soap", seller: "Artisan Crafts", emoji: "🧼", stock: 40, rating: 4.9, reviews: 15, image: null },
-            { id: 5, name: "Recipe Book", category: "books", price: 15.99, description: "Traditional recipes collection", seller: "Community Library", emoji: "📚", stock: 20, rating: 4.5, reviews: 12, image: null },
-            { id: 6, name: "Fresh Bread", category: "food", price: 2.99, description: "Daily baked fresh bread", seller: "Village Bakery", emoji: "🍞", stock: 15, rating: 4.8, reviews: 28, image: null },
-            { id: 7, name: "Knitted Scarf", category: "clothing", price: 18.99, description: "Warm knitted scarf", seller: "Grandma's Knits", emoji: "🧣", stock: 12, rating: 4.9, reviews: 8, image: null },
-            { id: 8, name: "LED Bulb", category: "electronics", price: 6.99, description: "Energy efficient LED bulb", seller: "Eco Electronics", emoji: "💡", stock: 35, rating: 4.4, reviews: 22, image: null }
+            { id: 1, name: "Fresh Organic Apples", category: "food", price: 1599, description: "Locally grown organic apples", seller: "Green Farm Co.", emoji: "🍎", stock: 50, rating: 4.8, reviews: 24, image: null },
+            { id: 2, name: "Cotton T-Shirt", category: "clothing", price: 5200, description: "Comfortable cotton t-shirt", seller: "Local Tailor", emoji: "👕", stock: 30, rating: 4.6, reviews: 18, image: null },
+            { id: 3, name: "Smartphone Case", category: "electronics", price: 3600, description: "Protective phone case", seller: "Tech Accessories", emoji: "📱", stock: 25, rating: 4.7, reviews: 32, image: null },
+            { id: 4, name: "Handmade Soap", category: "home", price: 1800, description: "Natural handmade soap", seller: "Artisan Crafts", emoji: "🧼", stock: 40, rating: 4.9, reviews: 15, image: null },
+            { id: 5, name: "Recipe Book", category: "books", price: 6400, description: "Traditional recipes collection", seller: "Community Library", emoji: "📚", stock: 20, rating: 4.5, reviews: 12, image: null },
+            { id: 6, name: "Fresh Bread", category: "food", price: 1200, description: "Daily baked fresh bread", seller: "Village Bakery", emoji: "🍞", stock: 15, rating: 4.8, reviews: 28, image: null },
+            { id: 7, name: "Knitted Scarf", category: "clothing", price: 7600, description: "Warm knitted scarf", seller: "Grandma's Knits", emoji: "🧣", stock: 12, rating: 4.9, reviews: 8, image: null },
+            { id: 8, name: "LED Bulb", category: "electronics", price: 2800, description: "Energy efficient LED bulb", seller: "Eco Electronics", emoji: "💡", stock: 35, rating: 4.4, reviews: 22, image: null }
         ];
 
         let cart = JSON.parse(localStorage.getItem('bomass_cart')) || [];
@@ -404,7 +404,7 @@
                         </div>
                         <p class="text-xs text-gray-500 mb-3">Sold by: ${product.seller} • Stock: ${product.stock}</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-2xl font-bold text-primary">$${product.price}</span>
+                            <span class="text-2xl font-bold text-primary">₦${product.price.toLocaleString()}</span>
                             <button onclick="addToCart(${product.id})" 
                                     ${product.stock === 0 ? 'disabled class="bg-gray-400 cursor-not-allowed text-white px-4 py-2 rounded-lg font-medium"' : 'class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-lg font-medium transition-colors"'}>
                                 ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
@@ -462,7 +462,7 @@
                             }
                             <div>
                                 <p class="font-medium text-sm">${item.name}</p>
-                                <p class="text-xs text-gray-500">$${item.price} each</p>
+                                <p class="text-xs text-gray-500">₦${item.price.toLocaleString()} each</p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
@@ -513,7 +513,7 @@
             displayProducts();
             toggleCart();
             
-            showNotification(`Order ${orderId} placed successfully! Total: $${total.toFixed(2)}`, 'success');
+            showNotification(`Order ${orderId} placed successfully! Total: ₦${total.toLocaleString()}`, 'success');
         }
 
         // Filter products
@@ -661,7 +661,7 @@
                         <p class="text-gray-600 text-sm mb-3">${product.description}</p>
                         <p class="text-xs text-gray-500 mb-3">Sold by: ${product.seller}</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-2xl font-bold text-primary">$${product.price}</span>
+                            <span class="text-2xl font-bold text-primary">₦${product.price.toLocaleString()}</span>
                             <button onclick="addToCart(${product.id})" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                                 Add to Cart
                             </button>
@@ -686,5 +686,5 @@
         displayProducts();
         updateCartDisplay();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97568377f4386f1a',t:'MTc1NjI0NDY5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9756a967572f41da',t:'MTc1NjI0NjI1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
