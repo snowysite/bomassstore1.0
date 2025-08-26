@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,18 +21,65 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .gradient-bg { background: linear-gradient(135deg, #059669 0%, #0d9488 100%); }
-        .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
-        .floating-cart { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
-        .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-        .modal.show { display: flex; align-items: center; justify-content: center; }
-        .category-scroll { scrollbar-width: none; -ms-overflow-style: none; }
-        .category-scroll::-webkit-scrollbar { display: none; }
-        .product-image { width: 100%; height: 200px; object-fit: cover; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .floating-cart {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .category-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
     </style>
 </head>
+
 <body class="bg-gray-50">
     <!-- Header -->
     <header class="gradient-bg shadow-lg sticky top-0 z-50">
@@ -40,7 +88,8 @@
                 <div class="flex items-center space-x-4">
                     <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                         </svg>
                     </div>
                     <div>
@@ -48,39 +97,48 @@
                         <p class="text-white/80 text-sm">Community Marketplace</p>
                     </div>
                 </div>
-                
+
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center space-x-2">
                     <a href="index.html" class="px-4 py-2 rounded-full text-white font-medium bg-white/20">
                         Home
                     </a>
-                    <a href="contact.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
+                    <a href="contact.html"
+                        class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
                         Contact Us
                     </a>
-                    <a href="login.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
+                    <a href="login.html"
+                        class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
                         logout
                     </a>
                 </nav>
-                
+
                 <div class="hidden md:flex flex-1 max-w-md mx-8">
                     <div class="relative w-full">
-                        <input type="text" id="searchInput" placeholder="Search products..." 
-                               class="w-full px-4 py-2 pl-10 rounded-full bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
-                        <svg class="absolute left-3 top-2.5 w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        <input type="text" id="searchInput" placeholder="Search products..."
+                            class="w-full px-4 py-2 pl-10 rounded-full bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
+                        <svg class="absolute left-3 top-2.5 w-5 h-5 text-white/70" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
                 </div>
-                
+
                 <div class="flex items-center space-x-4">
-                    <button onclick="toggleSellModal()" class="bg-accent hover:bg-accent/80 text-white px-4 py-2 rounded-full font-medium transition-colors">
+                    <button onclick="toggleSellModal()"
+                        class="bg-accent hover:bg-accent/80 text-white px-4 py-2 rounded-full font-medium transition-colors">
                         Donate Now
                     </button>
-                    <button onclick="toggleCart()" class="relative bg-white/20 hover:bg-white/30 p-2 rounded-full transition-colors">
+                    <button onclick="toggleCart()"
+                        class="relative bg-white/20 hover:bg-white/30 p-2 rounded-full transition-colors">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v5a2 2 0 01-2 2H9a2 2 0 01-2-2v-5m6-5V6a2 2 0 00-2-2H9a2 2 0 00-2 2v2"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v5a2 2 0 01-2 2H9a2 2 0 01-2-2v-5m6-5V6a2 2 0 00-2-2H9a2 2 0 00-2 2v2">
+                            </path>
                         </svg>
-                        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                        <span id="cartCount"
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
                     </button>
                 </div>
             </div>
@@ -91,22 +149,28 @@
     <section class="bg-white shadow-sm">
         <div class="container mx-auto px-4 py-4">
             <div class="flex space-x-6 overflow-x-auto category-scroll">
-                <button onclick="filterCategory('all')" class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-primary text-white font-medium">
+                <button onclick="filterCategory('all')"
+                    class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-primary text-white font-medium">
                     <span>All Items</span>
                 </button>
-                <button onclick="filterCategory('food')" class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">
+                <button onclick="filterCategory('food')"
+                    class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">
                     <span>🍎 Food</span>
                 </button>
-                <button onclick="filterCategory('clothing')" class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">
+                <button onclick="filterCategory('clothing')"
+                    class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">
                     <span>👕 Clothing</span>
                 </button>
-                <button onclick="filterCategory('electronics')" class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">
+                <button onclick="filterCategory('electronics')"
+                    class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">
                     <span>📱 Electronics</span>
                 </button>
-                <button onclick="filterCategory('home')" class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">
+                <button onclick="filterCategory('home')"
+                    class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">
                     <span>🏠 Home</span>
                 </button>
-                <button onclick="filterCategory('books')" class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">
+                <button onclick="filterCategory('books')"
+                    class="category-btn flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">
                     <span>📚 Books</span>
                 </button>
             </div>
@@ -117,12 +181,15 @@
     <section class="gradient-bg py-12">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold text-white mb-4">Empowering Communities Through Commerce</h2>
-            <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">Buy and sell quality goods at affordable prices. Supporting local entrepreneurs and making commerce accessible to everyone.</p>
+            <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">Buy and sell quality goods at affordable prices.
+                Supporting local entrepreneurs and making commerce accessible to everyone.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button onclick="scrollToProducts()" class="bg-white text-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                <button onclick="scrollToProducts()"
+                    class="bg-white text-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
                     Shop Now
                 </button>
-                <button onclick="toggleSellModal()" class="bg-accent text-white px-8 py-3 rounded-full font-semibold hover:bg-accent/80 transition-colors">
+                <button onclick="toggleSellModal()"
+                    class="bg-accent text-white px-8 py-3 rounded-full font-semibold hover:bg-accent/80 transition-colors">
                     Start Donating
                 </button>
             </div>
@@ -134,14 +201,15 @@
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center mb-8">
                 <h3 class="text-2xl font-bold text-gray-800">Featured Products</h3>
-                <select id="sortSelect" onchange="sortProducts()" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                <select id="sortSelect" onchange="sortProducts()"
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                     <option value="name">Sort by Name</option>
                     <option value="price-low">Price: Low to High</option>
                     <option value="price-high">Price: High to Low</option>
                     <option value="newest">Newest First</option>
                 </select>
             </div>
-            
+
             <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 <!-- Products will be dynamically loaded here -->
             </div>
@@ -150,11 +218,15 @@
 
     <!-- Floating Cart -->
     <div id="floatingCart" class="floating-cart">
-        <button onclick="toggleCart()" class="bg-primary hover:bg-primary/80 text-white p-4 rounded-full shadow-lg transition-all">
+        <button onclick="toggleCart()"
+            class="bg-primary hover:bg-primary/80 text-white p-4 rounded-full shadow-lg transition-all">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v5a2 2 0 01-2 2H9a2 2 0 01-2 2v-5m6-5V6a2 2 0 00-2-2H9a2 2 0 00-2 2v2"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v5a2 2 0 01-2 2H9a2 2 0 01-2 2v-5m6-5V6a2 2 0 00-2-2H9a2 2 0 00-2 2v2">
+                </path>
             </svg>
-            <span id="floatingCartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center">0</span>
+            <span id="floatingCartCount"
+                class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center">0</span>
         </button>
     </div>
 
@@ -165,7 +237,8 @@
                 <h3 class="text-xl font-bold text-gray-800">Shopping Cart</h3>
                 <button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
             </div>
@@ -176,7 +249,8 @@
                 <div class="flex justify-between items-center mb-4">
                     <span class="font-semibold">Total: ₦<span id="cartTotal">0.00</span></span>
                 </div>
-                <button onclick="checkout()" class="w-full bg-primary hover:bg-primary/80 text-white py-3 rounded-lg font-semibold transition-colors">
+                <button onclick="checkout()"
+                    class="w-full bg-primary hover:bg-primary/80 text-white py-3 rounded-lg font-semibold transition-colors">
                     Checkout
                 </button>
             </div>
@@ -190,18 +264,21 @@
                 <h3 class="text-xl font-bold text-gray-800">List Your Product</h3>
                 <button onclick="toggleSellModal()" class="text-gray-500 hover:text-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
             </div>
             <form onsubmit="addProduct(event)" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                    <input type="text" id="productName" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    <input type="text" id="productName" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                    <select id="productCategory" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    <select id="productCategory" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                         <option value="">Select Category</option>
                         <option value="food">Food</option>
                         <option value="clothing">Clothing</option>
@@ -212,31 +289,40 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Price (₦)</label>
-                    <input type="number" id="productPrice" step="0.01" min="0.01" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    <input type="number" id="productPrice" step="0.01" min="0.01" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea id="productDescription" rows="3" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                    <textarea id="productDescription" rows="3" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('productImage').click()">
-                        <input type="file" id="productImage" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer"
+                        onclick="document.getElementById('productImage').click()">
+                        <input type="file" id="productImage" accept="image/*" class="hidden"
+                            onchange="handleImageUpload(event)">
                         <div id="imagePreview" class="hidden">
                             <img id="previewImg" class="w-32 h-32 object-cover rounded-lg mx-auto mb-2">
                             <p class="text-sm text-gray-600 mb-2">Image selected</p>
-                            <button type="button" onclick="removeImage(event)" class="text-red-500 text-sm hover:text-red-700">Remove Image</button>
+                            <button type="button" onclick="removeImage(event)"
+                                class="text-red-500 text-sm hover:text-red-700">Remove Image</button>
                         </div>
                         <div id="uploadPrompt">
-                            <svg class="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            <svg class="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
                             </svg>
                             <p class="text-gray-600 mb-2">Click to upload product image</p>
                             <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-primary hover:bg-primary/80 text-white py-3 rounded-lg font-semibold transition-colors">
+                <button type="submit"
+                    class="w-full bg-primary hover:bg-primary/80 text-white py-3 rounded-lg font-semibold transition-colors">
                     List Product
                 </button>
             </form>
@@ -250,9 +336,11 @@
                 <!-- Company Info -->
                 <div class="space-y-6">
                     <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                        <div
+                            class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
                             <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                             </svg>
                         </div>
                         <div>
@@ -260,17 +348,27 @@
                             <p class="text-white/70 text-sm">Community Marketplace</p>
                         </div>
                     </div>
-                    <p class="text-white/85 text-sm leading-relaxed font-medium">Empowering communities through accessible commerce. Buy and sell quality goods at affordable prices while supporting local entrepreneurs.</p>
+                    <p class="text-white/85 text-sm leading-relaxed font-medium">Empowering communities through
+                        accessible commerce. Buy and sell quality goods at affordable prices while supporting local
+                        entrepreneurs.</p>
                 </div>
 
                 <!-- Quick Links -->
                 <div class="space-y-6">
                     <h4 class="text-xl font-bold text-white">Quick Links</h4>
                     <ul class="space-y-3">
-                        <li><a href="index.html" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">Home</a></li>
-                        <li><a href="contact.html" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">Contact Us</a></li>
-                        <li><a href="login.html" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">Login</a></li>
-                        <li><a href="#" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">Help & Support</a></li>
+                        <li><a href="index.html"
+                                class="text-white/85 hover:text-accent transition-colors text-sm font-medium">Home</a>
+                        </li>
+                        <li><a href="contact.html"
+                                class="text-white/85 hover:text-accent transition-colors text-sm font-medium">Contact
+                                Us</a></li>
+                        <li><a href="login.html"
+                                class="text-white/85 hover:text-accent transition-colors text-sm font-medium">Login</a>
+                        </li>
+                        <li><a href="#"
+                                class="text-white/85 hover:text-accent transition-colors text-sm font-medium">Help &
+                                Support</a></li>
                     </ul>
                 </div>
 
@@ -278,10 +376,14 @@
                 <div class="space-y-6">
                     <h4 class="text-xl font-bold text-white">Categories</h4>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">🍎 Food & Groceries</a></li>
-                        <li><a href="#" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">👕 Clothing & Fashion</a></li>
-                        <li><a href="#" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">📱 Electronics</a></li>
-                        <li><a href="#" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">🏠 Home & Garden</a></li>
+                        <li><a href="#" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">🍎
+                                Food & Groceries</a></li>
+                        <li><a href="#" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">👕
+                                Clothing & Fashion</a></li>
+                        <li><a href="#" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">📱
+                                Electronics</a></li>
+                        <li><a href="#" class="text-white/85 hover:text-accent transition-colors text-sm font-medium">🏠
+                                Home & Garden</a></li>
                     </ul>
                 </div>
 
@@ -291,7 +393,9 @@
                     <div class="space-y-4">
                         <div class="flex items-start space-x-3">
                             <svg class="w-5 h-5 text-white mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                </path>
                             </svg>
                             <div>
                                 <p class="text-white/85 text-sm font-medium">Community Center</p>
@@ -300,7 +404,9 @@
                         </div>
                         <div class="flex items-start space-x-3">
                             <svg class="w-5 h-5 text-white mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                </path>
                             </svg>
                             <div>
                                 <p class="text-white/85 text-sm font-medium">support@bomassstore.com</p>
@@ -316,8 +422,11 @@
                 <div class="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
                     <p class="text-white/85 text-sm font-medium">&copy; 2024 Bomass Store. All rights reserved.</p>
                     <div class="flex gap-6">
-                        <a href="#" class="text-white/75 hover:text-accent text-sm font-medium transition-colors">Privacy Policy</a>
-                        <a href="#" class="text-white/75 hover:text-accent text-sm font-medium transition-colors">Terms of Service</a>
+                        <a href="#"
+                            class="text-white/75 hover:text-accent text-sm font-medium transition-colors">Privacy
+                            Policy</a>
+                        <a href="#" class="text-white/75 hover:text-accent text-sm font-medium transition-colors">Terms
+                            of Service</a>
                     </div>
                 </div>
             </div>
@@ -358,7 +467,7 @@
                 }
 
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     currentImageData = e.target.result;
                     document.getElementById('previewImg').src = currentImageData;
                     document.getElementById('imagePreview').classList.remove('hidden');
@@ -381,16 +490,16 @@
         function displayProducts() {
             const grid = document.getElementById('productsGrid');
             const filteredProducts = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
-            
+
             grid.innerHTML = filteredProducts.map(product => `
                 <div class="bg-white rounded-xl shadow-md card-hover overflow-hidden border border-gray-100">
                     <div class="relative">
-                        ${product.image ? 
-                            `<img src="${product.image}" alt="${product.name}" class="product-image">` :
-                            `<div class="product-image bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                        ${product.image ?
+                    `<img src="${product.image}" alt="${product.name}" class="product-image">` :
+                    `<div class="product-image bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                                 <span class="text-6xl">${product.emoji}</span>
                             </div>`
-                        }
+                }
                         ${product.stock < 10 ? '<div class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Low Stock</div>' : ''}
                     </div>
                     <div class="p-6">
@@ -398,7 +507,7 @@
                         <p class="text-gray-600 text-sm mb-3">${product.description}</p>
                         <div class="flex items-center mb-2">
                             <div class="flex text-yellow-400 text-sm">
-                                ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5-Math.floor(product.rating))}
+                                ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
                             </div>
                             <span class="text-xs text-gray-500 ml-2">${product.rating} (${product.reviews} reviews)</span>
                         </div>
@@ -422,9 +531,9 @@
                 showNotification('Product is out of stock!', 'error');
                 return;
             }
-            
+
             const existingItem = cart.find(item => item.id === productId);
-            
+
             if (existingItem) {
                 if (existingItem.quantity >= product.stock) {
                     showNotification('Cannot add more items than available stock!', 'error');
@@ -434,7 +543,7 @@
             } else {
                 cart.push({ ...product, quantity: 1 });
             }
-            
+
             saveData();
             updateCartDisplay();
             showNotification(`${product.name} added to cart!`, 'success');
@@ -444,11 +553,11 @@
         function updateCartDisplay() {
             const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
             const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
+
             document.getElementById('cartCount').textContent = cartCount;
             document.getElementById('floatingCartCount').textContent = cartCount;
             document.getElementById('cartTotal').textContent = cartTotal.toFixed(2);
-            
+
             const cartItems = document.getElementById('cartItems');
             if (cart.length === 0) {
                 cartItems.innerHTML = '<p class="text-gray-500 text-center py-8">Your cart is empty</p>';
@@ -456,10 +565,10 @@
                 cartItems.innerHTML = cart.map(item => `
                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div class="flex items-center space-x-3">
-                            ${item.image ? 
-                                `<img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-lg">` :
-                                `<span class="text-2xl">${item.emoji}</span>`
-                            }
+                            ${item.image ?
+                        `<img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-lg">` :
+                        `<span class="text-2xl">${item.emoji}</span>`
+                    }
                             <div>
                                 <p class="font-medium text-sm">${item.name}</p>
                                 <p class="text-xs text-gray-500">₦${item.price.toLocaleString()} each</p>
@@ -494,10 +603,10 @@
                 showNotification('Your cart is empty!', 'error');
                 return;
             }
-            
+
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const orderId = 'ORD-' + Date.now();
-            
+
             // Update stock levels
             cart.forEach(cartItem => {
                 const product = products.find(p => p.id === cartItem.id);
@@ -505,14 +614,14 @@
                     product.stock -= cartItem.quantity;
                 }
             });
-            
+
             // Clear cart
             cart = [];
             saveData();
             updateCartDisplay();
             displayProducts();
             toggleCart();
-            
+
             showNotification(`Order ${orderId} placed successfully! Total: ₦${total.toLocaleString()}`, 'success');
         }
 
@@ -520,7 +629,7 @@
         function filterCategory(category) {
             currentFilter = category;
             displayProducts();
-            
+
             // Update category buttons
             document.querySelectorAll('.category-btn').forEach(btn => {
                 btn.classList.remove('bg-primary', 'text-white');
@@ -533,8 +642,8 @@
         // Sort products
         function sortProducts() {
             const sortBy = document.getElementById('sortSelect').value;
-            
-            switch(sortBy) {
+
+            switch (sortBy) {
                 case 'name':
                     products.sort((a, b) => a.name.localeCompare(b.name));
                     break;
@@ -561,7 +670,7 @@
         function toggleSellModal() {
             const modal = document.getElementById('sellModal');
             modal.classList.toggle('show');
-            
+
             // Reset form when closing
             if (!modal.classList.contains('show')) {
                 document.getElementById('productImage').value = '';
@@ -571,20 +680,32 @@
             }
         }
 
+        // Frontend usage example
+        const token = localStorage.getItem('token');
+
+        // Include in API requests
+        fetch('/api/products', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productData)
+        });
         // Add new product
         function addProduct(event) {
             event.preventDefault();
-            
+
             const name = document.getElementById('productName').value;
             const category = document.getElementById('productCategory').value;
             const price = parseFloat(document.getElementById('productPrice').value);
             const description = document.getElementById('productDescription').value;
-            
+
             const categoryEmojis = {
-                food: '🍎', clothing: '👕', electronics: '📱', 
+                food: '🍎', clothing: '👕', electronics: '📱',
                 home: '🏠', books: '📚'
             };
-            
+
             const newProduct = {
                 id: Date.now(), // Use timestamp for unique ID
                 name,
@@ -598,16 +719,16 @@
                 reviews: 0,
                 image: currentImageData
             };
-            
+
             products.unshift(newProduct);
             saveData();
             displayProducts();
             toggleSellModal();
-            
+
             // Reset form
             event.target.reset();
             currentImageData = null;
-            
+
             showNotification('Product listed successfully with image!', 'success');
         }
 
@@ -624,11 +745,11 @@
                 error: 'bg-red-500',
                 info: 'bg-blue-500'
             };
-            
+
             notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform max-w-sm`;
             notification.textContent = message;
             document.body.appendChild(notification);
-            
+
             setTimeout(() => notification.classList.remove('translate-x-full'), 100);
             setTimeout(() => {
                 notification.classList.add('translate-x-full');
@@ -637,24 +758,24 @@
         }
 
         // Search functionality
-        document.getElementById('searchInput').addEventListener('input', function(e) {
+        document.getElementById('searchInput').addEventListener('input', function (e) {
             const searchTerm = e.target.value.toLowerCase();
-            const filteredProducts = products.filter(product => 
+            const filteredProducts = products.filter(product =>
                 product.name.toLowerCase().includes(searchTerm) ||
                 product.description.toLowerCase().includes(searchTerm) ||
                 product.category.toLowerCase().includes(searchTerm)
             );
-            
+
             const grid = document.getElementById('productsGrid');
             grid.innerHTML = filteredProducts.map(product => `
                 <div class="bg-white rounded-xl shadow-md card-hover overflow-hidden">
                     <div class="relative">
-                        ${product.image ? 
-                            `<img src="${product.image}" alt="${product.name}" class="product-image">` :
-                            `<div class="product-image bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                        ${product.image ?
+                    `<img src="${product.image}" alt="${product.name}" class="product-image">` :
+                    `<div class="product-image bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                                 <span class="text-6xl">${product.emoji}</span>
                             </div>`
-                        }
+                }
                     </div>
                     <div class="p-6">
                         <h4 class="font-semibold text-gray-800 mb-2">${product.name}</h4>
@@ -672,7 +793,7 @@
         });
 
         // Close modals when clicking outside
-        window.addEventListener('click', function(e) {
+        window.addEventListener('click', function (e) {
             const modals = ['cartModal', 'sellModal'];
             modals.forEach(modalId => {
                 const modal = document.getElementById(modalId);
@@ -686,5 +807,7 @@
         displayProducts();
         updateCartDisplay();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9756a967572f41da',t:'MTc1NjI0NjI1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9756a967572f41da',t:'MTc1NjI0NjI1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
 </html>
