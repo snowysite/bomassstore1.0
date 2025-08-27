@@ -111,8 +111,49 @@
                         class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
                         logout
                     </a>
+                    <a href="adminlogin.html"
+                        class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
+                        Adminlogin
+                    </a>
                 </nav>
 
+
+
+                <!-- Mobile Navigation Dropdown -->
+                <div class="md:hidden hidden" id="mobile-menu">
+                    <div class="bg-gray-50 border-b">
+                        <button onclick="showTab('overview'); closeMobileMenu()"
+                            class="mobile-tab-button active w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-b border-gray-200"
+                            id="mobile-tab-overview">
+                            📋 Overview
+                        </button>
+                        <button onclick="showTab('nodejs'); closeMobileMenu()"
+                            class="mobile-tab-button w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-b border-gray-200"
+                            id="mobile-tab-nodejs">
+                            🟢 Node.js Server
+                        </button>
+                        <button onclick="showTab('database'); closeMobileMenu()"
+                            class="mobile-tab-button w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-b border-gray-200"
+                            id="mobile-tab-database">
+                            🗄️ Database Schema
+                        </button>
+                        <button onclick="showTab('api'); closeMobileMenu()"
+                            class="mobile-tab-button w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-b border-gray-200"
+                            id="mobile-tab-api">
+                            🔌 API Routes
+                        </button>
+                        <button onclick="showTab('auth'); closeMobileMenu()"
+                            class="mobile-tab-button w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-b border-gray-200"
+                            id="mobile-tab-auth">
+                            🔐 Authentication
+                        </button>
+                        <button onclick="showTab('deployment'); closeMobileMenu()"
+                            class="mobile-tab-button w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors"
+                            id="mobile-tab-deployment">
+                            🚀 Deployment
+                        </button>
+                    </div>
+                </div>
                 <div class="hidden md:flex flex-1 max-w-md mx-8">
                     <div class="relative w-full">
                         <input type="text" id="searchInput" placeholder="Search products..."
@@ -681,17 +722,29 @@
         }
 
         // Frontend usage example
+
         const token = localStorage.getItem('token');
 
+
+
         // Include in API requests
+
         fetch('/api/products', {
+
             method: 'POST',
+
             headers: {
+
                 'Authorization': `Bearer ${token}`,
+
                 'Content-Type': 'application/json'
+
             },
+
             body: JSON.stringify(productData)
+
         });
+
         // Add new product
         function addProduct(event) {
             event.preventDefault();

@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bomass Store Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#059669',
+                        secondary: '#0d9488',
+                        accent: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #059669 0%, #0d9488 100%); }
+        .sidebar-transition { transition: transform 0.3s ease-in-out; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-approved { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #fee2e2; color: #991b1b; }
+        .loading { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Admin Login</h2>
+                <p class="text-gray-600">Access the Bomass Store admin dashboard</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input type="email" id="loginEmail" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                           placeholder="admin@bomassstore.com">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="loginPassword" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                           placeholder="Enter your password">
+                </div>
+                
+                <button type="submit" id="loginBtn" 
+                        class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                    <span id="loginBtnText">Sign In</span>
+                    <svg id="loginSpinner" class="hidden w-5 h-5 mx-auto loading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                </button>
+            </form>
+            
+            <div id="loginError" class="hidden mt-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm"></div>
+            
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                <p class="text-sm text-blue-700"><strong>Demo Credentials:</strong></p>
+                <p class="text-xs text-blue-600 mt-1">Email: admin@bomassstore.com</p>
+                <p class="text-xs text-blue-600">Password: admin123456</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden min-h-screen">
+        <!-- Sidebar -->
+        <div id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg sidebar-transition">
+            <div class="flex items-center justify-center h-16 gradient-bg">
+                <h1 class="text-xl font-bold text-white">Admin Dashboard</h1>
+            </div>
+            
+            <nav class="mt-8">
+                <div class="px-4 space-y-2">
+                    <button onclick="showSection('overview')" class="nav-item active w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Overview
+                    </button>
+                    
+                    <button onclick="showSection('pending')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Pending Products
+                        <span id="pendingCount" class="ml-auto bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">0</span>
+                    </button>
+                    
+                    <button onclick="showSection('products')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        All Products
+                    </button>
+                    
+                    <button onclick="showSection('users')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                        Users
+                    </button>
+                    
+                    <button onclick="showSection('orders')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        Orders
+                    </button>
+                </div>
+                
+                <div class="absolute bottom-4 left-4 right-4">
+                    <button onclick="logout()" class="w-full flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Logout
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuBtn" class="lg:hidden fixed top-4 left-4 z-40 p-2 bg-white rounded-lg shadow-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+
+        <!-- Main Content -->
+        <div class="lg:ml-64 min-h-screen">
+            <!-- Header -->
+            <header class="bg-white shadow-sm border-b">
+                <div class="px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 id="pageTitle" class="text-2xl font-bold text-gray-800">Dashboard Overview</h2>
+                            <p class="text-gray-600">Manage your Bomass Store marketplace</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="text-right">
+                                <p class="text-sm font-medium text-gray-800" id="adminName">Admin User</p>
+                                <p class="text-xs text-gray-500" id="lastLogin">Last login: Today</p>
+                            </div>
+                            <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                                <span class="text-white font-medium" id="adminInitials">AU</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <main class="p-6">
+                <!-- Overview Section -->
+                <div id="section-overview" class="section-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-sm p-6 card-hover">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-blue-100 rounded-lg">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Total Users</p>
+                                    <p class="text-2xl font-bold text-gray-900" id="totalUsers">0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6 card-hover">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-green-100 rounded-lg">
+                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Total Products</p>
+                                    <p class="text-2xl font-bold text-gray-900" id="totalProducts">0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6 card-hover">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-yellow-100 rounded-lg">
+                                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Pending Approval</p>
+                                    <p class="text-2xl font-bold text-gray-900" id="pendingProducts">0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6 card-hover">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-purple-100 rounded-lg">
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Total Orders</p>
+                                    <p class="text-2xl font-bold text-gray-900" id="totalOrders">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg shadow-sm p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Activity</h3>
+                            <div id="recentActivity" class="space-y-4">
+                                <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-gray-800">New product submitted</p>
+                                        <p class="text-xs text-gray-500">2 minutes ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-gray-800">User registered</p>
+                                        <p class="text-xs text-gray-500">15 minutes ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                    <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-gray-800">Order placed</p>
+                                        <p class="text-xs text-gray-500">1 hour ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                            <div class="space-y-3">
+                                <button onclick="showSection('pending')" class="w-full flex items-center justify-between p-3 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors">
+                                    <span class="text-sm font-medium text-yellow-800">Review Pending Products</span>
+                                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                                <button onclick="showSection('users')" class="w-full flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                                    <span class="text-sm font-medium text-blue-800">Manage Users</span>
+                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                                <button onclick="showSection('orders')" class="w-full flex items-center justify-between p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                                    <span class="text-sm font-medium text-green-800">View Orders</span>
+                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Products Section -->
+                <div id="section-pending" class="section-content hidden">
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="p-6 border-b">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">Products Awaiting Approval</h3>
+                                <button onclick="loadPendingProducts()" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                    Refresh
+                                </button>
+                            </div>
+                        </div>
+                        <div id="pendingProductsList" class="p-6">
+                            <div class="text-center py-8">
+                                <div class="loading w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+                                <p class="text-gray-500">Loading pending products...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All Products Section -->
+                <div id="section-products" class="section-content hidden">
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="p-6 border-b">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">All Products</h3>
+                                <div class="flex space-x-2">
+                                    <select id="productStatusFilter" class="px-3 py-2 border border-gray-300 rounded-lg">
+                                        <option value="all">All Status</option>
+                                        <option value="approved">Approved</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="rejected">Rejected</option>
+                                    </select>
+                                    <button onclick="loadAllProducts()" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                        Refresh
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="allProductsList" class="p-6">
+                            <div class="text-center py-8">
+                                <div class="loading w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+                                <p class="text-gray-500">Loading products...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="section-users" class="section-content hidden">
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="p-6 border-b">
+                            <h3 class="text-lg font-semibold text-gray-800">User Management</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-center py-8">
+                                <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                </svg>
+                                <p class="text-gray-500">User management features coming soon...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="section-orders" class="section-content hidden">
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="p-6 border-b">
+                            <h3 class="text-lg font-semibold text-gray-800">Order Management</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-center py-8">
+                                <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                </svg>
+                                <p class="text-gray-500">Order management features coming soon...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Product Review Modal -->
+    <div id="reviewModal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-800">Review Product</h3>
+                    <button onclick="closeReviewModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="reviewModalContent" class="p-6">
+                <!-- Product details will be loaded here -->
+            </div>
+            
+            <div class="p-6 border-t bg-gray-50">
+                <div class="flex space-x-3">
+                    <button onclick="approveProduct()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                        ✓ Approve Product
+                    </button>
+                    <button onclick="showRejectForm()" class="flex-1 bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors">
+                        ✗ Reject Product
+                    </button>
+                </div>
+                
+                <div id="rejectForm" class="hidden mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Rejection Reason</label>
+                    <textarea id="rejectionReason" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Please provide a reason for rejection..."></textarea>
+                    <div class="flex space-x-3 mt-3">
+                        <button onclick="rejectProduct()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                            Confirm Rejection
+                        </button>
+                        <button onclick="hideRejectForm()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = 'http://localhost:5000/api'; // Change this to your backend URL
+        let currentProduct = null;
+        let authToken = localStorage.getItem('adminToken');
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            if (authToken) {
+                showDashboard();
+                loadDashboardData();
+            } else {
+                showLoginModal();
+            }
+            
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Mobile menu
+            document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+            
+            // Product status filter
+            document.getElementById('productStatusFilter').addEventListener('change', loadAllProducts);
+        }
+
+        // Authentication
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loginSpinner = document.getElementById('loginSpinner');
+            const loginError = document.getElementById('loginError');
+            
+            // Show loading state
+            loginBtnText.classList.add('hidden');
+            loginSpinner.classList.remove('hidden');
+            loginBtn.disabled = true;
+            loginError.classList.add('hidden');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    authToken = data.token;
+                    localStorage.setItem('adminToken', authToken);
+                    localStorage.setItem('adminUser', JSON.stringify(data.admin));
+                    
+                    showDashboard();
+                    loadDashboardData();
+                } else {
+                    throw new Error(data.message || 'Login failed');
+                }
+            } catch (error) {
+                loginError.textContent = error.message;
+                loginError.classList.remove('hidden');
+            } finally {
+                // Reset button state
+                loginBtnText.classList.remove('hidden');
+                loginSpinner.classList.add('hidden');
+                loginBtn.disabled = false;
+            }
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            
+            // Load admin info
+            const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
+            if (adminUser.name) {
+                document.getElementById('adminName').textContent = adminUser.name;
+                document.getElementById('adminInitials').textContent = adminUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            authToken = null;
+            showLoginModal();
+        }
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active', 'bg-primary', 'text-white');
+                item.classList.add('text-gray-700');
+            });
+            
+            // Show selected section
+            document.getElementById(`section-${sectionName}`).classList.remove('hidden');
+            
+            // Add active class to selected nav item
+            event.target.classList.add('active', 'bg-primary', 'text-white');
+            event.target.classList.remove('text-gray-700');
+            
+            // Update page title
+            const titles = {
+                overview: 'Dashboard Overview',
+                pending: 'Pending Products',
+                products: 'All Products',
+                users: 'User Management',
+                orders: 'Order Management'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionName] || 'Dashboard';
+            
+            // Load section data
+            switch(sectionName) {
+                case 'pending':
+                    loadPendingProducts();
+                    break;
+                case 'products':
+                    loadAllProducts();
+                    break;
+                case 'overview':
+                    loadDashboardData();
+                    break;
+            }
+        }
+
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
+        // API Functions
+        async function apiRequest(endpoint, options = {}) {
+            const url = `${API_BASE_URL}${endpoint}`;
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+                ...options
+            };
+            
+            try {
+                const response = await fetch(url, config);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Request failed');
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('API Request failed:', error);
+                if (error.message.includes('unauthorized') || error.message.includes('token')) {
+                    logout();
+                }
+                throw error;
+            }
+        }
+
+        // Dashboard Data
+        async function loadDashboardData() {
+            try {
+                const stats = await apiRequest('/admin/dashboard');
+                
+                document.getElementById('totalUsers').textContent = stats.stats.totalUsers;
+                document.getElementById('totalProducts').textContent = stats.stats.totalProducts;
+                document.getElementById('pendingProducts').textContent = stats.stats.pendingProducts;
+                document.getElementById('totalOrders').textContent = stats.stats.totalOrders;
+                document.getElementById('pendingCount').textContent = stats.stats.pendingProducts;
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+
+        // Pending Products
+        async function loadPendingProducts() {
+            const container = document.getElementById('pendingProductsList');
+            container.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="loading w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <p class="text-gray-500">Loading pending products...</p>
+                </div>
+            `;
+            
+            try {
+                const data = await apiRequest('/admin/products/pending');
+                
+                if (data.products.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-8">
+                            <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-gray-500">No pending products to review!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = data.products.map(product => `
+                    <div class="border border-gray-200 rounded-lg p-4 mb-4 hover:shadow-md transition-shadow">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden">
+                                ${product.images && product.images.length > 0 
+                                    ? `<img src="${product.images[0].url}" alt="${product.name}" class="w-full h-full object-cover">`
+                                    : `<div class="w-full h-full flex items-center justify-center text-gray-400">
+                                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                         </svg>
+                                       </div>`
+                                }
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">${product.name}</h4>
+                                        <p class="text-sm text-gray-600 mt-1">${product.description}</p>
+                                        <div class="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                                            <span>₦${product.price.toLocaleString()}</span>
+                                            <span>Category: ${product.category}</span>
+                                            <span>Stock: ${product.stock}</span>
+                                        </div>
+                                        <div class="flex items-center mt-2 text-sm text-gray-500">
+                                            <span>Seller: ${product.seller.name}</span>
+                                            <span class="mx-2">•</span>
+                                            <span>${new Date(product.createdAt).toLocaleDateString()}</span>
+                                        </div>
+                                    </div>
+                                    <span class="status-pending px-2 py-1 rounded-full text-xs font-medium">
+                                        Pending
+                                    </span>
+                                </div>
+                                <div class="flex space-x-2 mt-4">
+                                    <button onclick="reviewProduct('${product._id}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                                        Review
+                                    </button>
+                                    <button onclick="quickApprove('${product._id}')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
+                                        Quick Approve
+                                    </button>
+                                    <button onclick="quickReject('${product._id}')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
+                                        Quick Reject
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-red-500">Failed to load pending products</p>
+                        <button onclick="loadPendingProducts()" class="mt-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // All Products
+        async function loadAllProducts() {
+            const container = document.getElementById('allProductsList');
+            const statusFilter = document.getElementById('productStatusFilter').value;
+            
+            container.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="loading w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <p class="text-gray-500">Loading products...</p>
+                </div>
+            `;
+            
+            try {
+                // This would need to be implemented in your backend
+                const endpoint = statusFilter === 'all' ? '/products' : `/products?status=${statusFilter}`;
+                const data = await apiRequest(endpoint);
+                
+                if (data.products.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-8">
+                            <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                            <p class="text-gray-500">No products found</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${data.products.map(product => `
+                            <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                                <div class="h-48 bg-gray-200 overflow-hidden">
+                                    ${product.images && product.images.length > 0 
+                                        ? `<img src="${product.images[0].url}" alt="${product.name}" class="w-full h-full object-cover">`
+                                        : `<div class="w-full h-full flex items-center justify-center text-gray-400">
+                                             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                             </svg>
+                                           </div>`
+                                    }
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <h4 class="font-semibold text-gray-800 truncate">${product.name}</h4>
+                                        <span class="status-${product.status || 'approved'} px-2 py-1 rounded-full text-xs font-medium ml-2">
+                                            ${(product.status || 'approved').charAt(0).toUpperCase() + (product.status || 'approved').slice(1)}
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2 line-clamp-2">${product.description}</p>
+                                    <div class="flex items-center justify-between text-sm text-gray-500 mb-3">
+                                        <span class="font-medium text-gray-800">₦${product.price.toLocaleString()}</span>
+                                        <span>Stock: ${product.stock}</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mb-3">
+                                        <p>Seller: ${product.seller?.name || 'Unknown'}</p>
+                                        <p>Created: ${new Date(product.createdAt).toLocaleDateString()}</p>
+                                    </div>
+                                    ${product.status === 'pending' ? `
+                                        <div class="flex space-x-2">
+                                            <button onclick="reviewProduct('${product._id}')" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-colors">
+                                                Review
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-red-500">Failed to load products</p>
+                        <button onclick="loadAllProducts()" class="mt-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Product Review Modal
+        async function reviewProduct(productId) {
+            try {
+                const data = await apiRequest(`/products/${productId}`);
+                currentProduct = data.product;
+                
+                document.getElementById('reviewModalContent').innerHTML = `
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-3">Product Images</h4>
+                                <div class="grid grid-cols-2 gap-2">
+                                    ${currentProduct.images && currentProduct.images.length > 0 
+                                        ? currentProduct.images.map(img => `
+                                            <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden">
+                                                <img src="${img.url}" alt="${currentProduct.name}" class="w-full h-full object-cover">
+                                            </div>
+                                        `).join('')
+                                        : `<div class="col-span-2 aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
+                                             <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                             </svg>
+                                           </div>`
+                                    }
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-3">Product Details</h4>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-600">Name</label>
+                                        <p class="text-gray-800">${currentProduct.name}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-600">Description</label>
+                                        <p class="text-gray-800">${currentProduct.description}</p>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="text-sm font-medium text-gray-600">Price</label>
+                                            <p class="text-gray-800">₦${currentProduct.price.toLocaleString()}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-sm font-medium text-gray-600">Stock</label>
+                                            <p class="text-gray-800">${currentProduct.stock}</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-600">Category</label>
+                                        <p class="text-gray-800 capitalize">${currentProduct.category}</p>
+                                    </div>
+                                    ${currentProduct.tags && currentProduct.tags.length > 0 ? `
+                                        <div>
+                                            <label class="text-sm font-medium text-gray-600">Tags</label>
+                                            <div class="flex flex-wrap gap-1 mt-1">
+                                                ${currentProduct.tags.map(tag => `
+                                                    <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">${tag}</span>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">Seller Information</h4>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-600">Name</label>
+                                        <p class="text-gray-800">${currentProduct.seller.name}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-600">Email</label>
+                                        <p class="text-gray-800">${currentProduct.seller.email}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-600">Phone</label>
+                                        <p class="text-gray-800">${currentProduct.seller.phone || 'Not provided'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">Submission Details</h4>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-600">Submitted</label>
+                                        <p class="text-gray-800">${new Date(currentProduct.createdAt).toLocaleString()}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-600">Status</label>
+                                        <span class="status-${currentProduct.status || 'pending'} px-2 py-1 rounded-full text-xs font-medium">
+                                            ${(currentProduct.status || 'pending').charAt(0).toUpperCase() + (currentProduct.status || 'pending').slice(1)}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('reviewModal').classList.remove('hidden');
+            } catch (error) {
+                alert('Failed to load product details: ' + error.message);
+            }
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.add('hidden');
+            currentProduct = null;
+            hideRejectForm();
+        }
+
+        function showRejectForm() {
+            document.getElementById('rejectForm').classList.remove('hidden');
+        }
+
+        function hideRejectForm() {
+            document.getElementById('rejectForm').classList.add('hidden');
+            document.getElementById('rejectionReason').value = '';
+        }
+
+        // Product Actions
+        async function approveProduct() {
+            if (!currentProduct) return;
+            
+            try {
+                await apiRequest(`/admin/products/${currentProduct._id}/approve`, {
+                    method: 'PUT'
+                });
+                
+                alert('Product approved successfully!');
+                closeReviewModal();
+                loadPendingProducts();
+                loadDashboardData();
+            } catch (error) {
+                alert('Failed to approve product: ' + error.message);
+            }
+        }
+
+        async function rejectProduct() {
+            if (!currentProduct) return;
+            
+            const reason = document.getElementById('rejectionReason').value.trim();
+            if (!reason) {
+                alert('Please provide a rejection reason');
+                return;
+            }
+            
+            try {
+                await apiRequest(`/admin/products/${currentProduct._id}/reject`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ reason })
+                });
+                
+                alert('Product rejected successfully!');
+                closeReviewModal();
+                loadPendingProducts();
+                loadDashboardData();
+            } catch (error) {
+                alert('Failed to reject product: ' + error.message);
+            }
+        }
+
+        async function quickApprove(productId) {
+            if (!confirm('Are you sure you want to approve this product?')) return;
+            
+            try {
+                await apiRequest(`/admin/products/${productId}/approve`, {
+                    method: 'PUT'
+                });
+                
+                alert('Product approved successfully!');
+                loadPendingProducts();
+                loadDashboardData();
+            } catch (error) {
+                alert('Failed to approve product: ' + error.message);
+            }
+        }
+
+        async function quickReject(productId) {
+            const reason = prompt('Please provide a rejection reason:');
+            if (!reason) return;
+            
+            try {
+                await apiRequest(`/admin/products/${productId}/reject`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ reason })
+                });
+                
+                alert('Product rejected successfully!');
+                loadPendingProducts();
+                loadDashboardData();
+            } catch (error) {
+                alert('Failed to reject product: ' + error.message);
+            }
+        }
+
+        // Initialize first nav item as active
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstNavItem = document.querySelector('.nav-item');
+            if (firstNavItem) {
+                firstNavItem.classList.add('active', 'bg-primary', 'text-white');
+                firstNavItem.classList.remove('text-gray-700');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9759e070d02febb2',t:'MTc1NjI3OTk2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
