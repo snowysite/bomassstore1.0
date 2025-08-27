@@ -27,41 +27,76 @@
 <body class="bg-gray-50">
     <!-- Header -->
     <header class="gradient-bg shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white">Bomass Store</h1>
-                        <p class="text-white/80 text-sm">Community Marketplace</p>
-                    </div>
+    <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
                 </div>
-                
-                <!-- Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-2">
-                    <a href="index.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
-                        Home
-                    </a>
-                    <a href="contact.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
-                        Contact Us
-                    </a>
-                    <a href="login.html" class="px-4 py-2 rounded-full text-white font-medium bg-white/20">
-                        Logout
-                    </a>
-                </nav>
-                
-                <div class="flex items-center space-x-4">
-                    <a href="index.html" class="bg-accent hover:bg-accent/80 text-white px-4 py-2 rounded-full font-medium transition-colors">
-                        Shop Now
-                    </a>
+                <div>
+                    <h1 class="text-2xl font-bold text-white">Bomass Store</h1>
+                    <p class="text-white/80 text-sm">Community Marketplace</p>
                 </div>
             </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center space-x-2">
+                <a href="index.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20">Home</a>
+                <a href="contact.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20">Contact Us</a>
+                <a href="login.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20">Login</a>
+                <a href="adminlogin.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20">Admin</a>
+            </nav>
+
+            <!-- Mobile Hamburger -->
+            <button class="md:hidden text-white" id="mobile-menu-button">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+
+            <!-- Actions (Donate + Cart) -->
+            <div class="hidden md:flex items-center space-x-4">
+                <button onclick="toggleSellModal()"
+                    class="bg-accent hover:bg-accent/80 text-white px-4 py-2 rounded-full font-medium transition-colors">
+                    Donate Now
+                </button>
+                <button onclick="toggleCart()"
+                    class="relative bg-white/20 hover:bg-white/30 p-2 rounded-full transition-colors">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v5a2 2 0 01-2 2H9a2 2 0 01-2-2v-5m6-5V6a2 2 0 00-2-2H9a2 2 0 00-2 2v2"></path>
+                    </svg>
+                    <span id="cartCount"
+                        class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </button>
+            </div>
         </div>
-    </header>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden mt-4" id="mobile-menu">
+            <a href="index.html" class="block px-4 py-2 text-white rounded hover:bg-white/20">Home</a>
+            <a href="contact.html" class="block px-4 py-2 text-white rounded hover:bg-white/20">Contact Us</a>
+            <a href="login.html" class="block px-4 py-2 text-white rounded hover:bg-white/20">Login</a>
+            <a href="adminlogin.html" class="block px-4 py-2 text-white rounded hover:bg-white/20">Admin</a>
+            <button onclick="toggleSellModal()" class="block w-full text-left px-4 py-2 text-white hover:bg-white/20">Donate Now</button>
+            <button onclick="toggleCart()" class="block w-full text-left px-4 py-2 text-white hover:bg-white/20">Cart</button>
+        </div>
+    </div>
+</header>
+
+<script>
+    const mobileMenuBtn = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    mobileMenuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+    });
+</script>
 
     <!-- Login Hero -->
     <section class="gradient-bg py-16">

@@ -82,109 +82,78 @@
 
 <body class="bg-gray-50">
     <!-- Header -->
-    <header class="gradient-bg shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white">Bomass Store</h1>
-                        <p class="text-white/80 text-sm">Community Marketplace</p>
-                    </div>
+   <header class="gradient-bg shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
                 </div>
-
-                <!-- Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-2">
-                    <a href="index.html" class="px-4 py-2 rounded-full text-white font-medium bg-white/20">
-                        Home
-                    </a>
-                    <a href="contact.html"
-                        class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
-                        Contact Us
-                    </a>
-                    <a href="login.html"
-                        class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
-                        logout
-                    </a>
-                    <a href="adminlogin.html"
-                        class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20 transition-colors">
-                        Adminlogin
-                    </a>
-                </nav>
-
-
-
-                <!-- Mobile Navigation Dropdown -->
-                <div class="md:hidden hidden" id="mobile-menu">
-                    <div class="bg-gray-50 border-b">
-                        <button onclick="showTab('overview'); closeMobileMenu()"
-                            class="mobile-tab-button active w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-b border-gray-200"
-                            id="mobile-tab-overview">
-                            📋 Overview
-                        </button>
-                        <button onclick="showTab('nodejs'); closeMobileMenu()"
-                            class="mobile-tab-button w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-b border-gray-200"
-                            id="mobile-tab-nodejs">
-                            🟢 Node.js Server
-                        </button>
-                        <button onclick="showTab('database'); closeMobileMenu()"
-                            class="mobile-tab-button w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-b border-gray-200"
-                            id="mobile-tab-database">
-                            🗄️ Database Schema
-                        </button>
-                        <button onclick="showTab('api'); closeMobileMenu()"
-                            class="mobile-tab-button w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-b border-gray-200"
-                            id="mobile-tab-api">
-                            🔌 API Routes
-                        </button>
-                        <button onclick="showTab('auth'); closeMobileMenu()"
-                            class="mobile-tab-button w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-b border-gray-200"
-                            id="mobile-tab-auth">
-                            🔐 Authentication
-                        </button>
-                        <button onclick="showTab('deployment'); closeMobileMenu()"
-                            class="mobile-tab-button w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors"
-                            id="mobile-tab-deployment">
-                            🚀 Deployment
-                        </button>
-                    </div>
-                </div>
-                <div class="hidden md:flex flex-1 max-w-md mx-8">
-                    <div class="relative w-full">
-                        <input type="text" id="searchInput" placeholder="Search products..."
-                            class="w-full px-4 py-2 pl-10 rounded-full bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
-                        <svg class="absolute left-3 top-2.5 w-5 h-5 text-white/70" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="flex items-center space-x-4">
-                    <button onclick="toggleSellModal()"
-                        class="bg-accent hover:bg-accent/80 text-white px-4 py-2 rounded-full font-medium transition-colors">
-                        Donate Now
-                    </button>
-                    <button onclick="toggleCart()"
-                        class="relative bg-white/20 hover:bg-white/30 p-2 rounded-full transition-colors">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v5a2 2 0 01-2 2H9a2 2 0 01-2-2v-5m6-5V6a2 2 0 00-2-2H9a2 2 0 00-2 2v2">
-                            </path>
-                        </svg>
-                        <span id="cartCount"
-                            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-                    </button>
+                <div>
+                    <h1 class="text-2xl font-bold text-white">Bomass Store</h1>
+                    <p class="text-white/80 text-sm">Community Marketplace</p>
                 </div>
             </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center space-x-2">
+                <a href="index.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20">Home</a>
+                <a href="contact.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20">Contact Us</a>
+                <a href="login.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20">Login</a>
+                <a href="adminlogin.html" class="px-4 py-2 rounded-full text-white font-medium hover:bg-white/20">Admin</a>
+            </nav>
+
+            <!-- Mobile Hamburger -->
+            <button class="md:hidden text-white" id="mobile-menu-button">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+
+            <!-- Actions (Donate + Cart) -->
+            <div class="hidden md:flex items-center space-x-4">
+                <button onclick="toggleSellModal()"
+                    class="bg-accent hover:bg-accent/80 text-white px-4 py-2 rounded-full font-medium transition-colors">
+                    Donate Now
+                </button>
+                <button onclick="toggleCart()"
+                    class="relative bg-white/20 hover:bg-white/30 p-2 rounded-full transition-colors">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v5a2 2 0 01-2 2H9a2 2 0 01-2-2v-5m6-5V6a2 2 0 00-2-2H9a2 2 0 00-2 2v2"></path>
+                    </svg>
+                    <span id="cartCount"
+                        class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </button>
+            </div>
         </div>
-    </header>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden mt-4" id="mobile-menu">
+            <a href="index.html" class="block px-4 py-2 text-white rounded hover:bg-white/20">Home</a>
+            <a href="contact.html" class="block px-4 py-2 text-white rounded hover:bg-white/20">Contact Us</a>
+            <a href="login.html" class="block px-4 py-2 text-white rounded hover:bg-white/20">Login</a>
+            <a href="adminlogin.html" class="block px-4 py-2 text-white rounded hover:bg-white/20">Admin</a>
+            <button onclick="toggleSellModal()" class="block w-full text-left px-4 py-2 text-white hover:bg-white/20">Donate Now</button>
+            <button onclick="toggleCart()" class="block w-full text-left px-4 py-2 text-white hover:bg-white/20">Cart</button>
+        </div>
+    </div>
+</header>
+
+<script>
+    const mobileMenuBtn = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    mobileMenuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+    });
+</script>
+
 
     <!-- Categories -->
     <section class="bg-white shadow-sm">
