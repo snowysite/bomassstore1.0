@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bomass Store Admin Dashboard</title>
+    <title>Bomass Store - Admin Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -28,46 +28,58 @@
         .status-pending { background: #fef3c7; color: #92400e; }
         .status-approved { background: #d1fae5; color: #065f46; }
         .status-rejected { background: #fee2e2; color: #991b1b; }
+        .status-delivered { background: #e0e7ff; color: #3730a3; }
+        .status-processing { background: #fef3c7; color: #92400e; }
         .loading { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .modal-backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
+        .nav-item.active { background: #059669; color: white; }
+        .chart-container { height: 300px; }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Login Modal -->
-    <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
-        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
-            <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center gradient-bg">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                     </svg>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800">Admin Login</h2>
-                <p class="text-gray-600">Access the Bomass Store admin dashboard</p>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Admin Portal</h1>
+                <p class="text-gray-600">Bomass Store Management Dashboard</p>
             </div>
             
-            <form id="loginForm" class="space-y-4">
+            <form id="loginForm" class="space-y-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                     <input type="email" id="loginEmail" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                            placeholder="admin@bomassstore.com">
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
                     <input type="password" id="loginPassword" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                            placeholder="Enter your password">
                 </div>
                 
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                        <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-primary hover:text-primary/80">Forgot password?</a>
+                </div>
+                
                 <button type="submit" id="loginBtn" 
-                        class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
-                    <span id="loginBtnText">Sign In</span>
-                    <svg id="loginSpinner" class="hidden w-5 h-5 mx-auto loading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center">
+                    <span id="loginBtnText">Sign In to Dashboard</span>
+                    <svg id="loginSpinner" class="hidden w-5 h-5 ml-2 loading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                     </svg>
                 </button>
@@ -75,20 +87,36 @@
             
             <div id="loginError" class="hidden mt-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm"></div>
             
-            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-                <p class="text-sm text-blue-700"><strong>Demo Credentials:</strong></p>
-                <p class="text-xs text-blue-600 mt-1">Email: admin@bomassstore.com</p>
-                <p class="text-xs text-blue-600">Password: admin123456</p>
+            <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+                <p class="text-sm text-blue-700 font-medium mb-2">🔐 Demo Credentials:</p>
+                <div class="text-xs text-blue-600 space-y-1">
+                    <p><strong>Email:</strong> admin@bomassstore.com</p>
+                    <p><strong>Password:</strong> admin123456</p>
+                </div>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <p class="text-xs text-gray-500">
+                    © 2024 Bomass Store. All rights reserved.
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- Main Dashboard -->
+    <!-- Admin Dashboard -->
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-8 flex flex-col items-center">
+            <div class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p class="text-gray-700 font-medium" id="loadingText">Loading dashboard...</p>
+        </div>
+    </div>
+
     <div id="dashboard" class="hidden min-h-screen">
         <!-- Sidebar -->
         <div id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg sidebar-transition">
             <div class="flex items-center justify-center h-16 gradient-bg">
-                <h1 class="text-xl font-bold text-white">Admin Dashboard</h1>
+                <h1 class="text-xl font-bold text-white">Bomass Admin</h1>
             </div>
             
             <nav class="mt-8">
@@ -97,22 +125,23 @@
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
-                        Overview
-                    </button>
-                    
-                    <button onclick="showSection('pending')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Pending Products
-                        <span id="pendingCount" class="ml-auto bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">0</span>
+                        Dashboard
                     </button>
                     
                     <button onclick="showSection('products')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
-                        All Products
+                        Products
+                        <span id="pendingCount" class="ml-auto bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">3</span>
+                    </button>
+                    
+                    <button onclick="showSection('orders')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        Orders
+                        <span id="newOrdersCount" class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">5</span>
                     </button>
                     
                     <button onclick="showSection('users')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
@@ -122,11 +151,19 @@
                         Users
                     </button>
                     
-                    <button onclick="showSection('orders')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
+                    <button onclick="showSection('analytics')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
-                        Orders
+                        Analytics
+                    </button>
+                    
+                    <button onclick="showSection('settings')" class="nav-item w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Settings
                     </button>
                 </div>
                 
@@ -156,12 +193,18 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <h2 id="pageTitle" class="text-2xl font-bold text-gray-800">Dashboard Overview</h2>
-                            <p class="text-gray-600">Manage your Bomass Store marketplace</p>
+                            <p class="text-gray-600">Welcome back, manage your Bomass Store</p>
                         </div>
                         <div class="flex items-center space-x-4">
+                            <button class="relative p-2 text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4 19h6v-2H4v2zM4 15h8v-2H4v2zM4 11h10V9H4v2z"></path>
+                                </svg>
+                                <span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+                            </button>
                             <div class="text-right">
                                 <p class="text-sm font-medium text-gray-800" id="adminName">Admin User</p>
-                                <p class="text-xs text-gray-500" id="lastLogin">Last login: Today</p>
+                                <p class="text-xs text-gray-500" id="lastLogin">Last login: Today, 2:30 PM</p>
                             </div>
                             <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
                                 <span class="text-white font-medium" id="adminInitials">AU</span>
@@ -173,8 +216,9 @@
 
             <!-- Content Sections -->
             <main class="p-6">
-                <!-- Overview Section -->
-                <div id="section-overview" class="section-content">
+                <!-- Dashboard Overview Section -->
+                <div id="section-overview" class="section-content fade-in">
+                    <!-- Stats Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="bg-white rounded-lg shadow-sm p-6 card-hover">
                             <div class="flex items-center">
@@ -185,7 +229,8 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-600">Total Users</p>
-                                    <p class="text-2xl font-bold text-gray-900" id="totalUsers">0</p>
+                                    <p class="text-2xl font-bold text-gray-900">1,247</p>
+                                    <p class="text-xs text-green-600">+12% from last month</p>
                                 </div>
                             </div>
                         </div>
@@ -199,7 +244,8 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-600">Total Products</p>
-                                    <p class="text-2xl font-bold text-gray-900" id="totalProducts">0</p>
+                                    <p class="text-2xl font-bold text-gray-900">856</p>
+                                    <p class="text-xs text-green-600">+8% from last month</p>
                                 </div>
                             </div>
                         </div>
@@ -208,12 +254,13 @@
                             <div class="flex items-center">
                                 <div class="p-3 bg-yellow-100 rounded-lg">
                                     <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                     </svg>
                                 </div>
                                 <div class="ml-4">
-                                    <p class="text-sm font-medium text-gray-600">Pending Approval</p>
-                                    <p class="text-2xl font-bold text-gray-900" id="pendingProducts">0</p>
+                                    <p class="text-sm font-medium text-gray-600">Total Orders</p>
+                                    <p class="text-2xl font-bold text-gray-900">2,341</p>
+                                    <p class="text-xs text-green-600">+23% from last month</p>
                                 </div>
                             </div>
                         </div>
@@ -222,117 +269,283 @@
                             <div class="flex items-center">
                                 <div class="p-3 bg-purple-100 rounded-lg">
                                     <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
                                     </svg>
                                 </div>
                                 <div class="ml-4">
-                                    <p class="text-sm font-medium text-gray-600">Total Orders</p>
-                                    <p class="text-2xl font-bold text-gray-900" id="totalOrders">0</p>
+                                    <p class="text-sm font-medium text-gray-600">Revenue</p>
+                                    <p class="text-2xl font-bold text-gray-900">₦4.2M</p>
+                                    <p class="text-xs text-green-600">+18% from last month</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Charts and Recent Activity -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-sm p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Sales Overview</h3>
+                            <div class="chart-container bg-gray-50 rounded-lg flex items-center justify-center">
+                                <div class="text-center">
+                                    <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                    <p class="text-gray-500">Sales chart will be displayed here</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="bg-white rounded-lg shadow-sm p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Activity</h3>
-                            <div id="recentActivity" class="space-y-4">
+                            <div class="space-y-4">
                                 <div class="flex items-center p-3 bg-gray-50 rounded-lg">
                                     <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
                                     <div class="flex-1">
-                                        <p class="text-sm font-medium text-gray-800">New product submitted</p>
-                                        <p class="text-xs text-gray-500">2 minutes ago</p>
+                                        <p class="text-sm font-medium text-gray-800">New order received</p>
+                                        <p class="text-xs text-gray-500">Order #12345 - ₦25,000</p>
                                     </div>
+                                    <span class="text-xs text-gray-400">2 min ago</span>
                                 </div>
                                 <div class="flex items-center p-3 bg-gray-50 rounded-lg">
                                     <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
                                     <div class="flex-1">
-                                        <p class="text-sm font-medium text-gray-800">User registered</p>
-                                        <p class="text-xs text-gray-500">15 minutes ago</p>
+                                        <p class="text-sm font-medium text-gray-800">Product approved</p>
+                                        <p class="text-xs text-gray-500">iPhone 15 Pro Max</p>
                                     </div>
+                                    <span class="text-xs text-gray-400">15 min ago</span>
                                 </div>
                                 <div class="flex items-center p-3 bg-gray-50 rounded-lg">
                                     <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
                                     <div class="flex-1">
-                                        <p class="text-sm font-medium text-gray-800">Order placed</p>
-                                        <p class="text-xs text-gray-500">1 hour ago</p>
+                                        <p class="text-sm font-medium text-gray-800">New user registered</p>
+                                        <p class="text-xs text-gray-500">john.doe@email.com</p>
                                     </div>
+                                    <span class="text-xs text-gray-400">1 hour ago</span>
+                                </div>
+                                <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-gray-800">Product reported</p>
+                                        <p class="text-xs text-gray-500">Fake Nike Shoes</p>
+                                    </div>
+                                    <span class="text-xs text-gray-400">2 hours ago</span>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="bg-white rounded-lg shadow-sm p-6">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-                            <div class="space-y-3">
-                                <button onclick="showSection('pending')" class="w-full flex items-center justify-between p-3 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors">
-                                    <span class="text-sm font-medium text-yellow-800">Review Pending Products</span>
-                                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </button>
-                                <button onclick="showSection('users')" class="w-full flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
-                                    <span class="text-sm font-medium text-blue-800">Manage Users</span>
-                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </button>
-                                <button onclick="showSection('orders')" class="w-full flex items-center justify-between p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
-                                    <span class="text-sm font-medium text-green-800">View Orders</span>
-                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </button>
-                            </div>
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <button onclick="showSection('products')" class="flex items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                                <svg class="w-8 h-8 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+                                </svg>
+                                <div class="text-left">
+                                    <p class="font-medium text-gray-800">Review Products</p>
+                                    <p class="text-sm text-gray-600">3 pending approval</p>
+                                </div>
+                            </button>
+                            
+                            <button onclick="showSection('orders')" class="flex items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                                <svg class="w-8 h-8 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                </svg>
+                                <div class="text-left">
+                                    <p class="font-medium text-gray-800">Process Orders</p>
+                                    <p class="text-sm text-gray-600">5 new orders</p>
+                                </div>
+                            </button>
+                            
+                            <button onclick="showSection('users')" class="flex items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
+                                <svg class="w-8 h-8 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                </svg>
+                                <div class="text-left">
+                                    <p class="font-medium text-gray-800">Manage Users</p>
+                                    <p class="text-sm text-gray-600">View all users</p>
+                                </div>
+                            </button>
+                            
+                            <button onclick="showSection('analytics')" class="flex items-center p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors">
+                                <svg class="w-8 h-8 text-yellow-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                <div class="text-left">
+                                    <p class="font-medium text-gray-800">View Analytics</p>
+                                    <p class="text-sm text-gray-600">Sales reports</p>
+                                </div>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Pending Products Section -->
-                <div id="section-pending" class="section-content hidden">
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <div class="p-6 border-b">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-lg font-semibold text-gray-800">Products Awaiting Approval</h3>
-                                <button onclick="loadPendingProducts()" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                    </svg>
-                                    Refresh
-                                </button>
-                            </div>
-                        </div>
-                        <div id="pendingProductsList" class="p-6">
-                            <div class="text-center py-8">
-                                <div class="loading w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                                <p class="text-gray-500">Loading pending products...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- All Products Section -->
+                <!-- Products Section -->
                 <div id="section-products" class="section-content hidden">
                     <div class="bg-white rounded-lg shadow-sm">
                         <div class="p-6 border-b">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-semibold text-gray-800">All Products</h3>
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">Product Management</h3>
                                 <div class="flex space-x-2">
-                                    <select id="productStatusFilter" class="px-3 py-2 border border-gray-300 rounded-lg">
-                                        <option value="all">All Status</option>
-                                        <option value="approved">Approved</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="rejected">Rejected</option>
+                                    <select class="px-3 py-2 border border-gray-300 rounded-lg">
+                                        <option>All Products</option>
+                                        <option>Pending Approval</option>
+                                        <option>Approved</option>
+                                        <option>Rejected</option>
                                     </select>
-                                    <button onclick="loadAllProducts()" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-                                        Refresh
+                                    <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                        Add Product
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div id="allProductsList" class="p-6">
-                            <div class="text-center py-8">
-                                <div class="loading w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                                <p class="text-gray-500">Loading products...</p>
+                        <div class="p-6">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b">
+                                            <th class="text-left py-3 px-4 font-medium text-gray-600">Product</th>
+                                            <th class="text-left py-3 px-4 font-medium text-gray-600">Category</th>
+                                            <th class="text-left py-3 px-4 font-medium text-gray-600">Price</th>
+                                            <th class="text-left py-3 px-4 font-medium text-gray-600">Stock</th>
+                                            <th class="text-left py-3 px-4 font-medium text-gray-600">Status</th>
+                                            <th class="text-left py-3 px-4 font-medium text-gray-600">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b hover:bg-gray-50">
+                                            <td class="py-3 px-4">
+                                                <div class="flex items-center">
+                                                    <div class="w-10 h-10 bg-gray-200 rounded-lg mr-3"></div>
+                                                    <div>
+                                                        <p class="font-medium text-gray-800">iPhone 15 Pro Max</p>
+                                                        <p class="text-sm text-gray-600">Apple</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="py-3 px-4 text-gray-600">Electronics</td>
+                                            <td class="py-3 px-4 text-gray-800 font-medium">₦1,200,000</td>
+                                            <td class="py-3 px-4 text-gray-600">15</td>
+                                            <td class="py-3 px-4">
+                                                <span class="status-pending px-2 py-1 rounded-full text-xs font-medium">Pending</span>
+                                            </td>
+                                            <td class="py-3 px-4">
+                                                <div class="flex space-x-2">
+                                                    <button class="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700">Approve</button>
+                                                    <button class="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700">Reject</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-b hover:bg-gray-50">
+                                            <td class="py-3 px-4">
+                                                <div class="flex items-center">
+                                                    <div class="w-10 h-10 bg-gray-200 rounded-lg mr-3"></div>
+                                                    <div>
+                                                        <p class="font-medium text-gray-800">Samsung Galaxy S24</p>
+                                                        <p class="text-sm text-gray-600">Samsung</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="py-3 px-4 text-gray-600">Electronics</td>
+                                            <td class="py-3 px-4 text-gray-800 font-medium">₦950,000</td>
+                                            <td class="py-3 px-4 text-gray-600">8</td>
+                                            <td class="py-3 px-4">
+                                                <span class="status-approved px-2 py-1 rounded-full text-xs font-medium">Approved</span>
+                                            </td>
+                                            <td class="py-3 px-4">
+                                                <div class="flex space-x-2">
+                                                    <button class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Edit</button>
+                                                    <button class="px-3 py-1 bg-gray-600 text-white rounded text-sm hover:bg-gray-700">View</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="section-orders" class="section-content hidden">
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="p-6 border-b">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">Order Management</h3>
+                                <div class="flex space-x-2">
+                                    <select class="px-3 py-2 border border-gray-300 rounded-lg">
+                                        <option>All Orders</option>
+                                        <option>Pending</option>
+                                        <option>Processing</option>
+                                        <option>Delivered</option>
+                                        <option>Cancelled</option>
+                                    </select>
+                                    <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                        Export Orders
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-4 mb-2">
+                                                <h4 class="font-semibold text-gray-800">Order #ORD-001</h4>
+                                                <span class="status-pending px-2 py-1 rounded-full text-xs font-medium">Pending</span>
+                                            </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-3">
+                                                <div>
+                                                    <span class="font-medium">Customer:</span> John Doe
+                                                </div>
+                                                <div>
+                                                    <span class="font-medium">Total:</span> ₦1,200,000
+                                                </div>
+                                                <div>
+                                                    <span class="font-medium">Date:</span> Dec 15, 2024
+                                                </div>
+                                            </div>
+                                            <div class="text-sm text-gray-600">
+                                                <span class="font-medium">Items:</span> iPhone 15 Pro Max, AirPods Pro
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2 ml-4">
+                                            <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">View</button>
+                                            <button class="px-3 py-2 bg-green-600 text-white rounded text-sm hover:bg-green-700">Process</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-4 mb-2">
+                                                <h4 class="font-semibold text-gray-800">Order #ORD-002</h4>
+                                                <span class="status-processing px-2 py-1 rounded-full text-xs font-medium">Processing</span>
+                                            </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-3">
+                                                <div>
+                                                    <span class="font-medium">Customer:</span> Jane Smith
+                                                </div>
+                                                <div>
+                                                    <span class="font-medium">Total:</span> ₦450,000
+                                                </div>
+                                                <div>
+                                                    <span class="font-medium">Date:</span> Dec 14, 2024
+                                                </div>
+                                            </div>
+                                            <div class="text-sm text-gray-600">
+                                                <span class="font-medium">Items:</span> MacBook Air M2, Magic Mouse
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2 ml-4">
+                                            <button class="px-3 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">View</button>
+                                            <button class="px-3 py-2 bg-purple-600 text-white rounded text-sm hover:bg-purple-700">Ship</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -355,18 +568,36 @@
                     </div>
                 </div>
 
-                <!-- Orders Section -->
-                <div id="section-orders" class="section-content hidden">
+                <!-- Analytics Section -->
+                <div id="section-analytics" class="section-content hidden">
                     <div class="bg-white rounded-lg shadow-sm">
                         <div class="p-6 border-b">
-                            <h3 class="text-lg font-semibold text-gray-800">Order Management</h3>
+                            <h3 class="text-lg font-semibold text-gray-800">Analytics & Reports</h3>
                         </div>
                         <div class="p-6">
                             <div class="text-center py-8">
                                 <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                                 </svg>
-                                <p class="text-gray-500">Order management features coming soon...</p>
+                                <p class="text-gray-500">Analytics dashboard coming soon...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="section-settings" class="section-content hidden">
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="p-6 border-b">
+                            <h3 class="text-lg font-semibold text-gray-800">System Settings</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-center py-8">
+                                <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <p class="text-gray-500">Settings panel coming soon...</p>
                             </div>
                         </div>
                     </div>
@@ -375,65 +606,14 @@
         </div>
     </div>
 
-    <!-- Product Review Modal -->
-    <div id="reviewModal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
-        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-gray-800">Review Product</h3>
-                    <button onclick="closeReviewModal()" class="text-gray-400 hover:text-gray-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            
-            <div id="reviewModalContent" class="p-6">
-                <!-- Product details will be loaded here -->
-            </div>
-            
-            <div class="p-6 border-t bg-gray-50">
-                <div class="flex space-x-3">
-                    <button onclick="approveProduct()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition-colors">
-                        ✓ Approve Product
-                    </button>
-                    <button onclick="showRejectForm()" class="flex-1 bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors">
-                        ✗ Reject Product
-                    </button>
-                </div>
-                
-                <div id="rejectForm" class="hidden mt-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Rejection Reason</label>
-                    <textarea id="rejectionReason" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Please provide a reason for rejection..."></textarea>
-                    <div class="flex space-x-3 mt-3">
-                        <button onclick="rejectProduct()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                            Confirm Rejection
-                        </button>
-                        <button onclick="hideRejectForm()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Configuration
-        const API_BASE_URL = 'http://localhost:5000/api'; // Change this to your backend URL
-        let currentProduct = null;
-        let authToken = localStorage.getItem('adminToken');
+        // Authentication state
+        let isLoggedIn = false;
+        let currentUser = null;
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
-            if (authToken) {
-                showDashboard();
-                loadDashboardData();
-            } else {
-                showLoginModal();
-            }
-            
+            checkAuthState();
             setupEventListeners();
         });
 
@@ -443,12 +623,29 @@
             
             // Mobile menu
             document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
-            
-            // Product status filter
-            document.getElementById('productStatusFilter').addEventListener('change', loadAllProducts);
         }
 
-        // Authentication
+        function checkAuthState() {
+            showLoader('Initializing application...');
+            
+            // Simulate app initialization
+            setTimeout(() => {
+                // Check if user is already logged in (from localStorage)
+                const savedAuth = localStorage.getItem('bomassAdminAuth');
+                if (savedAuth) {
+                    const authData = JSON.parse(savedAuth);
+                    if (authData.token && authData.expiry > Date.now()) {
+                        isLoggedIn = true;
+                        currentUser = authData.user;
+                        showDashboard();
+                        updateUserInfo();
+                        return;
+                    }
+                }
+                showLoginPage();
+            }, 1000);
+        }
+
         async function handleLogin(e) {
             e.preventDefault();
             
@@ -466,25 +663,31 @@
             loginError.classList.add('hidden');
             
             try {
-                const response = await fetch(`${API_BASE_URL}/admin/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
+                // Simulate API call (replace with actual authentication)
+                await new Promise(resolve => setTimeout(resolve, 1500));
                 
-                const data = await response.json();
-                
-                if (data.success) {
-                    authToken = data.token;
-                    localStorage.setItem('adminToken', authToken);
-                    localStorage.setItem('adminUser', JSON.stringify(data.admin));
+                // Demo credentials check
+                if (email === 'admin@bomassstore.com' && password === 'admin123456') {
+                    // Successful login
+                    const authData = {
+                        token: 'demo_token_' + Date.now(),
+                        user: {
+                            id: 1,
+                            name: 'Admin User',
+                            email: email,
+                            role: 'admin'
+                        },
+                        expiry: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+                    };
+                    
+                    localStorage.setItem('bomassAdminAuth', JSON.stringify(authData));
+                    isLoggedIn = true;
+                    currentUser = authData.user;
                     
                     showDashboard();
-                    loadDashboardData();
+                    updateUserInfo();
                 } else {
-                    throw new Error(data.message || 'Login failed');
+                    throw new Error('Invalid email or password');
                 }
             } catch (error) {
                 loginError.textContent = error.message;
@@ -497,72 +700,101 @@
             }
         }
 
-        function showLoginModal() {
-            document.getElementById('loginModal').classList.remove('hidden');
+        function showLoader(text = 'Loading...') {
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+            document.getElementById('loadingText').textContent = text;
+        }
+
+        function hideLoader() {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+
+        function showLoginPage() {
+            document.getElementById('loginPage').classList.remove('hidden');
             document.getElementById('dashboard').classList.add('hidden');
+            hideLoader();
         }
 
         function showDashboard() {
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
+            showLoader('Loading dashboard...');
             
-            // Load admin info
-            const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
-            if (adminUser.name) {
-                document.getElementById('adminName').textContent = adminUser.name;
-                document.getElementById('adminInitials').textContent = adminUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            // Simulate dashboard loading time
+            setTimeout(() => {
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                
+                // Initialize dashboard
+                showSection('overview');
+                hideLoader();
+            }, 1500);
+        }
+
+        function updateUserInfo() {
+            if (currentUser) {
+                document.getElementById('adminName').textContent = currentUser.name;
+                document.getElementById('adminInitials').textContent = 
+                    currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                
+                // Update last login time
+                const now = new Date();
+                document.getElementById('lastLogin').textContent = 
+                    `Last login: ${now.toLocaleDateString()}, ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
             }
         }
 
         function logout() {
-            localStorage.removeItem('adminToken');
-            localStorage.removeItem('adminUser');
-            authToken = null;
-            showLoginModal();
+            localStorage.removeItem('bomassAdminAuth');
+            isLoggedIn = false;
+            currentUser = null;
+            showLoginPage();
         }
 
         // Navigation
         function showSection(sectionName) {
-            // Hide all sections
-            document.querySelectorAll('.section-content').forEach(section => {
-                section.classList.add('hidden');
-            });
-            
-            // Remove active class from all nav items
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active', 'bg-primary', 'text-white');
-                item.classList.add('text-gray-700');
-            });
-            
-            // Show selected section
-            document.getElementById(`section-${sectionName}`).classList.remove('hidden');
-            
-            // Add active class to selected nav item
-            event.target.classList.add('active', 'bg-primary', 'text-white');
-            event.target.classList.remove('text-gray-700');
-            
-            // Update page title
-            const titles = {
-                overview: 'Dashboard Overview',
-                pending: 'Pending Products',
-                products: 'All Products',
-                users: 'User Management',
-                orders: 'Order Management'
-            };
-            document.getElementById('pageTitle').textContent = titles[sectionName] || 'Dashboard';
-            
-            // Load section data
-            switch(sectionName) {
-                case 'pending':
-                    loadPendingProducts();
-                    break;
-                case 'products':
-                    loadAllProducts();
-                    break;
-                case 'overview':
-                    loadDashboardData();
-                    break;
+            // Show loader for section switching (except initial load)
+            if (document.getElementById('dashboard').classList.contains('hidden') === false) {
+                showLoader('Loading section...');
             }
+            
+            setTimeout(() => {
+                // Hide all sections
+                document.querySelectorAll('.section-content').forEach(section => {
+                    section.classList.add('hidden');
+                });
+                
+                // Remove active class from all nav items
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Show selected section
+                const targetSection = document.getElementById(`section-${sectionName}`);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                    targetSection.classList.add('fade-in');
+                }
+                
+                // Add active class to selected nav item
+                if (event && event.target) {
+                    event.target.classList.add('active');
+                }
+                
+                // Update page title
+                const titles = {
+                    overview: 'Dashboard Overview',
+                    products: 'Product Management',
+                    orders: 'Order Management',
+                    users: 'User Management',
+                    analytics: 'Analytics & Reports',
+                    settings: 'System Settings'
+                };
+                document.getElementById('pageTitle').textContent = titles[sectionName] || 'Dashboard';
+                
+                // Hide loader after section is loaded
+                if (document.getElementById('dashboard').classList.contains('hidden') === false) {
+                    hideLoader();
+                }
+            }, 500);
         }
 
         function toggleMobileMenu() {
@@ -570,437 +802,51 @@
             sidebar.classList.toggle('-translate-x-full');
         }
 
-        // API Functions
-        async function apiRequest(endpoint, options = {}) {
-            const url = `${API_BASE_URL}${endpoint}`;
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authToken}`
-                },
-                ...options
-            };
-            
-            try {
-                const response = await fetch(url, config);
-                const data = await response.json();
+        // Simulate real-time updates
+        function simulateRealTimeUpdates() {
+            // Update notification badges randomly
+            setInterval(() => {
+                const pendingCount = Math.floor(Math.random() * 10);
+                const orderCount = Math.floor(Math.random() * 15);
                 
-                if (!response.ok) {
-                    throw new Error(data.message || 'Request failed');
+                document.getElementById('pendingCount').textContent = pendingCount;
+                document.getElementById('newOrdersCount').textContent = orderCount;
+                
+                if (pendingCount === 0) {
+                    document.getElementById('pendingCount').style.display = 'none';
+                } else {
+                    document.getElementById('pendingCount').style.display = 'inline-block';
                 }
                 
-                return data;
-            } catch (error) {
-                console.error('API Request failed:', error);
-                if (error.message.includes('unauthorized') || error.message.includes('token')) {
-                    logout();
+                if (orderCount === 0) {
+                    document.getElementById('newOrdersCount').style.display = 'none';
+                } else {
+                    document.getElementById('newOrdersCount').style.display = 'inline-block';
                 }
-                throw error;
-            }
+            }, 30000); // Update every 30 seconds
         }
 
-        // Dashboard Data
-        async function loadDashboardData() {
-            try {
-                const stats = await apiRequest('/admin/dashboard');
-                
-                document.getElementById('totalUsers').textContent = stats.stats.totalUsers;
-                document.getElementById('totalProducts').textContent = stats.stats.totalProducts;
-                document.getElementById('pendingProducts').textContent = stats.stats.pendingProducts;
-                document.getElementById('totalOrders').textContent = stats.stats.totalOrders;
-                document.getElementById('pendingCount').textContent = stats.stats.pendingProducts;
-            } catch (error) {
-                console.error('Failed to load dashboard data:', error);
-            }
-        }
+        // Start real-time updates when dashboard is shown
+        setTimeout(simulateRealTimeUpdates, 2000);
 
-        // Pending Products
-        async function loadPendingProducts() {
-            const container = document.getElementById('pendingProductsList');
-            container.innerHTML = `
-                <div class="text-center py-8">
-                    <div class="loading w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                    <p class="text-gray-500">Loading pending products...</p>
-                </div>
-            `;
+        // Handle responsive sidebar
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                document.getElementById('sidebar').classList.remove('-translate-x-full');
+            }
+        });
+
+        // Auto-hide mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             
-            try {
-                const data = await apiRequest('/admin/products/pending');
-                
-                if (data.products.length === 0) {
-                    container.innerHTML = `
-                        <div class="text-center py-8">
-                            <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <p class="text-gray-500">No pending products to review!</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                container.innerHTML = data.products.map(product => `
-                    <div class="border border-gray-200 rounded-lg p-4 mb-4 hover:shadow-md transition-shadow">
-                        <div class="flex items-start space-x-4">
-                            <div class="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden">
-                                ${product.images && product.images.length > 0 
-                                    ? `<img src="${product.images[0].url}" alt="${product.name}" class="w-full h-full object-cover">`
-                                    : `<div class="w-full h-full flex items-center justify-center text-gray-400">
-                                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                         </svg>
-                                       </div>`
-                                }
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">${product.name}</h4>
-                                        <p class="text-sm text-gray-600 mt-1">${product.description}</p>
-                                        <div class="flex items-center space-x-4 mt-2 text-sm text-gray-500">
-                                            <span>₦${product.price.toLocaleString()}</span>
-                                            <span>Category: ${product.category}</span>
-                                            <span>Stock: ${product.stock}</span>
-                                        </div>
-                                        <div class="flex items-center mt-2 text-sm text-gray-500">
-                                            <span>Seller: ${product.seller.name}</span>
-                                            <span class="mx-2">•</span>
-                                            <span>${new Date(product.createdAt).toLocaleDateString()}</span>
-                                        </div>
-                                    </div>
-                                    <span class="status-pending px-2 py-1 rounded-full text-xs font-medium">
-                                        Pending
-                                    </span>
-                                </div>
-                                <div class="flex space-x-2 mt-4">
-                                    <button onclick="reviewProduct('${product._id}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                                        Review
-                                    </button>
-                                    <button onclick="quickApprove('${product._id}')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-                                        Quick Approve
-                                    </button>
-                                    <button onclick="quickReject('${product._id}')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
-                                        Quick Reject
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-                
-            } catch (error) {
-                container.innerHTML = `
-                    <div class="text-center py-8">
-                        <svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <p class="text-red-500">Failed to load pending products</p>
-                        <button onclick="loadPendingProducts()" class="mt-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-                            Try Again
-                        </button>
-                    </div>
-                `;
-            }
-        }
-
-        // All Products
-        async function loadAllProducts() {
-            const container = document.getElementById('allProductsList');
-            const statusFilter = document.getElementById('productStatusFilter').value;
-            
-            container.innerHTML = `
-                <div class="text-center py-8">
-                    <div class="loading w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                    <p class="text-gray-500">Loading products...</p>
-                </div>
-            `;
-            
-            try {
-                // This would need to be implemented in your backend
-                const endpoint = statusFilter === 'all' ? '/products' : `/products?status=${statusFilter}`;
-                const data = await apiRequest(endpoint);
-                
-                if (data.products.length === 0) {
-                    container.innerHTML = `
-                        <div class="text-center py-8">
-                            <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                            </svg>
-                            <p class="text-gray-500">No products found</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                container.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${data.products.map(product => `
-                            <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                                <div class="h-48 bg-gray-200 overflow-hidden">
-                                    ${product.images && product.images.length > 0 
-                                        ? `<img src="${product.images[0].url}" alt="${product.name}" class="w-full h-full object-cover">`
-                                        : `<div class="w-full h-full flex items-center justify-center text-gray-400">
-                                             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                             </svg>
-                                           </div>`
-                                    }
-                                </div>
-                                <div class="p-4">
-                                    <div class="flex items-start justify-between mb-2">
-                                        <h4 class="font-semibold text-gray-800 truncate">${product.name}</h4>
-                                        <span class="status-${product.status || 'approved'} px-2 py-1 rounded-full text-xs font-medium ml-2">
-                                            ${(product.status || 'approved').charAt(0).toUpperCase() + (product.status || 'approved').slice(1)}
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-gray-600 mb-2 line-clamp-2">${product.description}</p>
-                                    <div class="flex items-center justify-between text-sm text-gray-500 mb-3">
-                                        <span class="font-medium text-gray-800">₦${product.price.toLocaleString()}</span>
-                                        <span>Stock: ${product.stock}</span>
-                                    </div>
-                                    <div class="text-xs text-gray-500 mb-3">
-                                        <p>Seller: ${product.seller?.name || 'Unknown'}</p>
-                                        <p>Created: ${new Date(product.createdAt).toLocaleDateString()}</p>
-                                    </div>
-                                    ${product.status === 'pending' ? `
-                                        <div class="flex space-x-2">
-                                            <button onclick="reviewProduct('${product._id}')" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-colors">
-                                                Review
-                                            </button>
-                                        </div>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                
-            } catch (error) {
-                container.innerHTML = `
-                    <div class="text-center py-8">
-                        <svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <p class="text-red-500">Failed to load products</p>
-                        <button onclick="loadAllProducts()" class="mt-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-                            Try Again
-                        </button>
-                    </div>
-                `;
-            }
-        }
-
-        // Product Review Modal
-        async function reviewProduct(productId) {
-            try {
-                const data = await apiRequest(`/products/${productId}`);
-                currentProduct = data.product;
-                
-                document.getElementById('reviewModalContent').innerHTML = `
-                    <div class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-3">Product Images</h4>
-                                <div class="grid grid-cols-2 gap-2">
-                                    ${currentProduct.images && currentProduct.images.length > 0 
-                                        ? currentProduct.images.map(img => `
-                                            <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden">
-                                                <img src="${img.url}" alt="${currentProduct.name}" class="w-full h-full object-cover">
-                                            </div>
-                                        `).join('')
-                                        : `<div class="col-span-2 aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
-                                             <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                             </svg>
-                                           </div>`
-                                    }
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-3">Product Details</h4>
-                                <div class="space-y-3">
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Name</label>
-                                        <p class="text-gray-800">${currentProduct.name}</p>
-                                    </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Description</label>
-                                        <p class="text-gray-800">${currentProduct.description}</p>
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="text-sm font-medium text-gray-600">Price</label>
-                                            <p class="text-gray-800">₦${currentProduct.price.toLocaleString()}</p>
-                                        </div>
-                                        <div>
-                                            <label class="text-sm font-medium text-gray-600">Stock</label>
-                                            <p class="text-gray-800">${currentProduct.stock}</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Category</label>
-                                        <p class="text-gray-800 capitalize">${currentProduct.category}</p>
-                                    </div>
-                                    ${currentProduct.tags && currentProduct.tags.length > 0 ? `
-                                        <div>
-                                            <label class="text-sm font-medium text-gray-600">Tags</label>
-                                            <div class="flex flex-wrap gap-1 mt-1">
-                                                ${currentProduct.tags.map(tag => `
-                                                    <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">${tag}</span>
-                                                `).join('')}
-                                            </div>
-                                        </div>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-3">Seller Information</h4>
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Name</label>
-                                        <p class="text-gray-800">${currentProduct.seller.name}</p>
-                                    </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Email</label>
-                                        <p class="text-gray-800">${currentProduct.seller.email}</p>
-                                    </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Phone</label>
-                                        <p class="text-gray-800">${currentProduct.seller.phone || 'Not provided'}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-3">Submission Details</h4>
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Submitted</label>
-                                        <p class="text-gray-800">${new Date(currentProduct.createdAt).toLocaleString()}</p>
-                                    </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Status</label>
-                                        <span class="status-${currentProduct.status || 'pending'} px-2 py-1 rounded-full text-xs font-medium">
-                                            ${(currentProduct.status || 'pending').charAt(0).toUpperCase() + (currentProduct.status || 'pending').slice(1)}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                document.getElementById('reviewModal').classList.remove('hidden');
-            } catch (error) {
-                alert('Failed to load product details: ' + error.message);
-            }
-        }
-
-        function closeReviewModal() {
-            document.getElementById('reviewModal').classList.add('hidden');
-            currentProduct = null;
-            hideRejectForm();
-        }
-
-        function showRejectForm() {
-            document.getElementById('rejectForm').classList.remove('hidden');
-        }
-
-        function hideRejectForm() {
-            document.getElementById('rejectForm').classList.add('hidden');
-            document.getElementById('rejectionReason').value = '';
-        }
-
-        // Product Actions
-        async function approveProduct() {
-            if (!currentProduct) return;
-            
-            try {
-                await apiRequest(`/admin/products/${currentProduct._id}/approve`, {
-                    method: 'PUT'
-                });
-                
-                alert('Product approved successfully!');
-                closeReviewModal();
-                loadPendingProducts();
-                loadDashboardData();
-            } catch (error) {
-                alert('Failed to approve product: ' + error.message);
-            }
-        }
-
-        async function rejectProduct() {
-            if (!currentProduct) return;
-            
-            const reason = document.getElementById('rejectionReason').value.trim();
-            if (!reason) {
-                alert('Please provide a rejection reason');
-                return;
-            }
-            
-            try {
-                await apiRequest(`/admin/products/${currentProduct._id}/reject`, {
-                    method: 'PUT',
-                    body: JSON.stringify({ reason })
-                });
-                
-                alert('Product rejected successfully!');
-                closeReviewModal();
-                loadPendingProducts();
-                loadDashboardData();
-            } catch (error) {
-                alert('Failed to reject product: ' + error.message);
-            }
-        }
-
-        async function quickApprove(productId) {
-            if (!confirm('Are you sure you want to approve this product?')) return;
-            
-            try {
-                await apiRequest(`/admin/products/${productId}/approve`, {
-                    method: 'PUT'
-                });
-                
-                alert('Product approved successfully!');
-                loadPendingProducts();
-                loadDashboardData();
-            } catch (error) {
-                alert('Failed to approve product: ' + error.message);
-            }
-        }
-
-        async function quickReject(productId) {
-            const reason = prompt('Please provide a rejection reason:');
-            if (!reason) return;
-            
-            try {
-                await apiRequest(`/admin/products/${productId}/reject`, {
-                    method: 'PUT',
-                    body: JSON.stringify({ reason })
-                });
-                
-                alert('Product rejected successfully!');
-                loadPendingProducts();
-                loadDashboardData();
-            } catch (error) {
-                alert('Failed to reject product: ' + error.message);
-            }
-        }
-
-        // Initialize first nav item as active
-        document.addEventListener('DOMContentLoaded', function() {
-            const firstNavItem = document.querySelector('.nav-item');
-            if (firstNavItem) {
-                firstNavItem.classList.add('active', 'bg-primary', 'text-white');
-                firstNavItem.classList.remove('text-gray-700');
+            if (window.innerWidth < 1024 && 
+                !sidebar.contains(e.target) && 
+                !mobileMenuBtn.contains(e.target)) {
+                sidebar.classList.add('-translate-x-full');
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9759e070d02febb2',t:'MTc1NjI3OTk2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97668a08664a6f79',t:'MTc1NjQxMjc0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
