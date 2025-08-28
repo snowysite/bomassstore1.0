@@ -170,9 +170,11 @@ html lang="en">
                         </svg>
                         <span id="cartCount" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-4 w-4 md:h-5 md:w-5 flex items-center justify-center text-xs">0</span>
                     </button>
-                    <button onclick="showAuthModal()" id="authBtn" class="bg-primary text-white px-3 py-2 md:px-4 md:py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm">
+                    <!-- Desktop Sign In Button -->
+                    <button onclick="showAuthModal()" id="authBtn" class="hidden md:block bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm">
                         Sign In
                     </button>
+                    <!-- Desktop User Menu -->
                     <div id="userMenu" class="hidden relative">
                         <button onclick="toggleUserMenu()" class="flex items-center space-x-2 text-gray-700 hover:text-primary">
                             <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
@@ -210,6 +212,28 @@ html lang="en">
                 <button onclick="showDonateModal()" class="block w-full text-left px-3 py-2 text-gray-600 hover:text-primary">Donate Products</button>
                 <a href="adminlogin.html" class="block px-3 py-2 text-gray-600 hover:text-primary">Admin</a>
                 <a href="#contact" class="block px-3 py-2 text-gray-600 hover:text-primary">Contact</a>
+                
+                <!-- Mobile Auth Section -->
+                <div class="border-t border-gray-200 pt-3 mt-3">
+                    <!-- Mobile Sign In Button -->
+                    <button onclick="showAuthModal(); toggleMobileMenu();" id="mobileAuthBtn" class="block w-full text-left px-3 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                        Sign In
+                    </button>
+                    
+                    <!-- Mobile User Menu -->
+                    <div id="mobileUserMenu" class="hidden">
+                        <div class="flex items-center px-3 py-2 border-b border-gray-200">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center mr-3">
+                                <span id="mobileUserInitials" class="text-white text-sm font-medium"></span>
+                            </div>
+                            <span id="mobileUserName" class="font-medium text-gray-900"></span>
+                        </div>
+                        <a href="#" onclick="showProfile(); toggleMobileMenu();" class="block px-3 py-2 text-gray-600 hover:text-primary">My Profile</a>
+                        <a href="#" onclick="showOrders(); toggleMobileMenu();" class="block px-3 py-2 text-gray-600 hover:text-primary">My Orders</a>
+                        <a href="#" onclick="showDonations(); toggleMobileMenu();" class="block px-3 py-2 text-gray-600 hover:text-primary">My Donations</a>
+                        <button onclick="logout(); toggleMobileMenu();" class="block w-full text-left px-3 py-2 text-red-600 hover:bg-gray-50">Logout</button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -974,8 +998,7 @@ html lang="en">
         function setupEventListeners() {
             // Mobile menu toggle
             document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-                const mobileMenu = document.getElementById('mobile-menu');
-                mobileMenu.classList.toggle('hidden');
+                toggleMobileMenu();
             });
 
             // Auth form submission
@@ -1811,20 +1834,43 @@ html lang="en">
             showNotification(`Welcome ${user.name}!`, 'success');
         }
 
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
         function updateAuthUI() {
             const authBtn = document.getElementById('authBtn');
             const userMenu = document.getElementById('userMenu');
             const userName = document.getElementById('userName');
             const userInitials = document.getElementById('userInitials');
+            
+            // Mobile elements
+            const mobileAuthBtn = document.getElementById('mobileAuthBtn');
+            const mobileUserMenu = document.getElementById('mobileUserMenu');
+            const mobileUserName = document.getElementById('mobileUserName');
+            const mobileUserInitials = document.getElementById('mobileUserInitials');
 
             if (currentUser) {
+                // Desktop
                 authBtn.classList.add('hidden');
                 userMenu.classList.remove('hidden');
                 userName.textContent = currentUser.name;
                 userInitials.textContent = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                
+                // Mobile
+                mobileAuthBtn.classList.add('hidden');
+                mobileUserMenu.classList.remove('hidden');
+                mobileUserName.textContent = currentUser.name;
+                mobileUserInitials.textContent = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
             } else {
+                // Desktop
                 authBtn.classList.remove('hidden');
                 userMenu.classList.add('hidden');
+                
+                // Mobile
+                mobileAuthBtn.classList.remove('hidden');
+                mobileUserMenu.classList.add('hidden');
             }
         }
 
@@ -2046,5 +2092,5 @@ html lang="en">
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9767463921641fd5',t:'MTc1NjQyMDQ0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9767559d7383f533',t:'MTc1NjQyMTA3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
