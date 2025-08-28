@@ -46,6 +46,10 @@ html lang="en">
         .text-gradient { background: linear-gradient(135deg, #059669, #0d9488, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .modal-backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
         .notification { position: fixed; top: 20px; right: 20px; z-index: 1000; transform: translateX(400px); transition: transform 0.3s ease; }
+        @media (max-width: 640px) {
+            .notification { right: 10px; left: 10px; transform: translateY(-100px); max-width: none; }
+            .notification.show { transform: translateY(0); }
+        }
         .notification.show { transform: translateX(0); }
         .loading { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -142,31 +146,31 @@ html lang="en">
                         <a href="#categories" class="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">Categories</a>
                         <a href="#products" class="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">Products</a>
                         <button onclick="showDonateModal()" class="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">Donate Products</button>
-                        <a href="adminlogin.html" class="px-4 py-2 rounded-full text-black font-medium hover:bg-white/20">Admin</a>
+                        <a href="adminlogin.html" class="gradient-bg px-4 py-2 rounded-full text-white font-medium hover:bg-white/20">Admin</a>
                         <a href="#contact" class="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">Contact</a>
                     </div>
                 </div>
 
                 <!-- Right side buttons -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 md:space-x-4">
                     <button onclick="showSearchModal()" class="relative p-2 text-gray-600 hover:text-primary transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </button>
                     <button onclick="showWishlist()" class="relative p-2 text-gray-600 hover:text-primary transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                         </svg>
-                        <span id="wishlistCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                        <span id="wishlistCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 md:h-5 md:w-5 flex items-center justify-center text-xs">0</span>
                     </button>
                     <button onclick="showCart()" class="relative p-2 text-gray-600 hover:text-primary transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 13v4a2 2 0 01-2 2H9a2 2 0 01-2-2v-4m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
                         </svg>
-                        <span id="cartCount" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                        <span id="cartCount" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-4 w-4 md:h-5 md:w-5 flex items-center justify-center text-xs">0</span>
                     </button>
-                    <button onclick="showAuthModal()" id="authBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium">
+                    <button onclick="showAuthModal()" id="authBtn" class="bg-primary text-white px-3 py-2 md:px-4 md:py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm">
                         Sign In
                     </button>
                     <div id="userMenu" class="hidden relative">
@@ -174,9 +178,9 @@ html lang="en">
                             <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                                 <span id="userInitials" class="text-white text-sm font-medium"></span>
                             </div>
-                            <span id="userName" class="font-medium"></span>
+                            <span id="userName" class="font-medium hidden md:block"></span>
                         </button>
-                        <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border">
+                        <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50">
                             <a href="#" onclick="showProfile()" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">My Profile</a>
                             <a href="#" onclick="showOrders()" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">My Orders</a>
                             <a href="#" onclick="showDonations()" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">My Donations</a>
@@ -212,37 +216,37 @@ html lang="en">
 
     <!-- Hero Section -->
     <section id="home" class="pt-16 hero-gradient min-h-screen flex items-center">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="slide-in">
-                    <h1 class="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <div class="slide-in text-center lg:text-left">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6 leading-tight">
                         Shop Smart,
                         <span class="text-yellow-300">Live Better</span>
                     </h1>
-                    <p class="text-xl text-white/90 mb-8 leading-relaxed">
+                    <p class="text-lg md:text-xl text-white/90 mb-6 md:mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                         Discover premium products at unbeatable prices. From electronics to fashion, 
                         we bring you the world's best brands with guaranteed authenticity.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="bg-white text-primary px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 pulse-glow">
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="bg-white text-primary px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 pulse-glow text-sm md:text-base">
                             🛍️ Start Shopping
                         </button>
-                        <button onclick="showDonateModal()" class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-primary transition-all">
+                        <button onclick="showDonateModal()" class="border-2 border-white text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold hover:bg-white hover:text-primary transition-all text-sm md:text-base">
                             💝 Donate Products
                         </button>
                     </div>
-                    <div class="mt-12 flex items-center space-x-8">
+                    <div class="mt-8 md:mt-12 flex items-center justify-center lg:justify-start space-x-4 md:space-x-8">
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-white">50K+</div>
-                            <div class="text-white/80">Happy Customers</div>
+                            <div class="text-2xl md:text-3xl font-bold text-white">50K+</div>
+                            <div class="text-white/80 text-sm md:text-base">Happy Customers</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-white">10K+</div>
-                            <div class="text-white/80">Products</div>
+                            <div class="text-2xl md:text-3xl font-bold text-white">10K+</div>
+                            <div class="text-white/80 text-sm md:text-base">Products</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-white">99%</div>
-                            <div class="text-white/80">Satisfaction</div>
+                            <div class="text-2xl md:text-3xl font-bold text-white">99%</div>
+                            <div class="text-white/80 text-sm md:text-base">Satisfaction</div>
                         </div>
                     </div>
                 </div>
@@ -277,15 +281,15 @@ html lang="en">
     </section>
 
     <!-- Features Section -->
-    <section class="py-20 bg-white">
+    <section class="py-12 md:py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 fade-in">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Choose Bomass Store?</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            <div class="text-center mb-12 md:mb-16 fade-in">
+                <h2 class="text-2xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose Bomass Store?</h2>
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
                     We're committed to providing you with the best shopping experience through our premium services and quality products.
                 </p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                 <div class="text-center card-hover bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl">
                     <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -330,57 +334,57 @@ html lang="en">
     </section>
 
     <!-- Categories Section -->
-    <section id="categories" class="py-20 bg-gray-50">
+    <section id="categories" class="py-12 md:py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 fade-in">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Shop by Category</h2>
-                <p class="text-xl text-gray-600">Explore our wide range of product categories</p>
+            <div class="text-center mb-12 md:mb-16 fade-in">
+                <h2 class="text-2xl md:text-4xl font-bold text-gray-900 mb-4">Shop by Category</h2>
+                <p class="text-lg md:text-xl text-gray-600">Explore our wide range of product categories</p>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                <div class="category-card p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('electronics')">
-                    <div class="text-5xl mb-4">📱</div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Electronics</h3>
-                    <p class="text-sm text-gray-600">2,450+ items</p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+                <div class="category-card p-4 md:p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('electronics')">
+                    <div class="text-3xl md:text-5xl mb-2 md:mb-4">📱</div>
+                    <h3 class="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">Electronics</h3>
+                    <p class="text-xs md:text-sm text-gray-600">2,450+ items</p>
                 </div>
-                <div class="category-card p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('fashion')">
-                    <div class="text-5xl mb-4">👕</div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Fashion</h3>
-                    <p class="text-sm text-gray-600">1,890+ items</p>
+                <div class="category-card p-4 md:p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('fashion')">
+                    <div class="text-3xl md:text-5xl mb-2 md:mb-4">👕</div>
+                    <h3 class="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">Fashion</h3>
+                    <p class="text-xs md:text-sm text-gray-600">1,890+ items</p>
                 </div>
-                <div class="category-card p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('home')">
-                    <div class="text-5xl mb-4">🏠</div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Home & Garden</h3>
-                    <p class="text-sm text-gray-600">3,200+ items</p>
+                <div class="category-card p-4 md:p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('home')">
+                    <div class="text-3xl md:text-5xl mb-2 md:mb-4">🏠</div>
+                    <h3 class="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">Home & Garden</h3>
+                    <p class="text-xs md:text-sm text-gray-600">3,200+ items</p>
                 </div>
-                <div class="category-card p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('beauty')">
-                    <div class="text-5xl mb-4">💄</div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Beauty</h3>
-                    <p class="text-sm text-gray-600">1,560+ items</p>
+                <div class="category-card p-4 md:p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('beauty')">
+                    <div class="text-3xl md:text-5xl mb-2 md:mb-4">💄</div>
+                    <h3 class="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">Beauty</h3>
+                    <p class="text-xs md:text-sm text-gray-600">1,560+ items</p>
                 </div>
-                <div class="category-card p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('sports')">
-                    <div class="text-5xl mb-4">⚽</div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Sports</h3>
-                    <p class="text-sm text-gray-600">980+ items</p>
+                <div class="category-card p-4 md:p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('sports')">
+                    <div class="text-3xl md:text-5xl mb-2 md:mb-4">⚽</div>
+                    <h3 class="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">Sports</h3>
+                    <p class="text-xs md:text-sm text-gray-600">980+ items</p>
                 </div>
-                <div class="category-card p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('books')">
-                    <div class="text-5xl mb-4">📚</div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Books</h3>
-                    <p class="text-sm text-gray-600">750+ items</p>
+                <div class="category-card p-4 md:p-6 rounded-2xl text-center card-hover border border-gray-200 cursor-pointer" onclick="filterByCategory('books')">
+                    <div class="text-3xl md:text-5xl mb-2 md:mb-4">📚</div>
+                    <h3 class="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">Books</h3>
+                    <p class="text-xs md:text-sm text-gray-600">750+ items</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Products Section -->
-    <section id="products" class="py-20 bg-white">
+    <section id="products" class="py-12 md:py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between mb-16">
-                <div class="fade-in">
-                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Featured Products</h2>
-                    <p class="text-xl text-gray-600">Handpicked products just for you</p>
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 md:mb-16">
+                <div class="fade-in mb-6 lg:mb-0 text-center lg:text-left">
+                    <h2 class="text-2xl md:text-4xl font-bold text-gray-900 mb-2 md:mb-4">Featured Products</h2>
+                    <p class="text-lg md:text-xl text-gray-600">Handpicked products just for you</p>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <select id="categoryFilter" onchange="filterProducts()" class="px-4 py-2 border border-gray-300 rounded-lg">
+                <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                    <select id="categoryFilter" onchange="filterProducts()" class="w-full sm:w-auto px-3 md:px-4 py-2 border border-gray-300 rounded-lg text-sm md:text-base">
                         <option value="">All Categories</option>
                         <option value="electronics">Electronics</option>
                         <option value="fashion">Fashion</option>
@@ -389,7 +393,7 @@ html lang="en">
                         <option value="sports">Sports</option>
                         <option value="books">Books</option>
                     </select>
-                    <select id="sortFilter" onchange="sortProducts()" class="px-4 py-2 border border-gray-300 rounded-lg">
+                    <select id="sortFilter" onchange="sortProducts()" class="w-full sm:w-auto px-3 md:px-4 py-2 border border-gray-300 rounded-lg text-sm md:text-base">
                         <option value="featured">Featured</option>
                         <option value="price-low">Price: Low to High</option>
                         <option value="price-high">Price: High to Low</option>
@@ -398,11 +402,11 @@ html lang="en">
                     </select>
                 </div>
             </div>
-            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
                 <!-- Products will be dynamically loaded here -->
             </div>
-            <div class="text-center mt-12">
-                <button onclick="loadMoreProducts()" class="bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium">
+            <div class="text-center mt-8 md:mt-12">
+                <button onclick="loadMoreProducts()" class="bg-primary text-white px-6 md:px-8 py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm md:text-base">
                     Load More Products
                 </button>
             </div>
@@ -410,17 +414,17 @@ html lang="en">
     </section>
 
     <!-- Newsletter Section -->
-    <section class="py-20 gradient-bg">
+    <section class="py-12 md:py-20 gradient-bg">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="fade-in">
-                <h2 class="text-4xl font-bold text-white mb-4">Stay Updated</h2>
-                <p class="text-xl text-white/90 mb-8">
+                <h2 class="text-2xl md:text-4xl font-bold text-white mb-4">Stay Updated</h2>
+                <p class="text-lg md:text-xl text-white/90 mb-6 md:mb-8">
                     Subscribe to our newsletter and get exclusive deals, new product alerts, and shopping tips.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                     <input type="email" id="newsletterEmail" placeholder="Enter your email address" 
-                           class="flex-1 px-6 py-4 rounded-xl border-0 focus:ring-4 focus:ring-white/20 text-gray-900">
-                    <button onclick="subscribeNewsletter()" class="bg-white text-primary px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-colors">
+                           class="flex-1 px-4 md:px-6 py-3 md:py-4 rounded-xl border-0 focus:ring-4 focus:ring-white/20 text-gray-900 text-sm md:text-base">
+                    <button onclick="subscribeNewsletter()" class="bg-white text-primary px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold hover:bg-gray-100 transition-colors text-sm md:text-base">
                         Subscribe
                     </button>
                 </div>
@@ -432,9 +436,9 @@ html lang="en">
     </section>
 
     <!-- Footer -->
-    <footer id="contact" class="bg-gray-900 text-white py-16">
+    <footer id="contact" class="bg-gray-900 text-white py-12 md:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                 <div>
                     <div class="flex items-center mb-6">
                         <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center mr-3">
@@ -525,7 +529,7 @@ html lang="en">
     <!-- Auth Modal -->
     <div id="authModal" class="hidden fixed inset-0 z-50 modal-backdrop">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8 mx-4">
                 <div class="text-center mb-8">
                     <h2 id="authTitle" class="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h2>
                     <p class="text-gray-600">Sign in to your account</p>
@@ -570,7 +574,7 @@ html lang="en">
     <!-- Cart Modal -->
     <div id="cartModal" class="hidden fixed inset-0 z-50 modal-backdrop">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden mx-4">
                 <div class="p-6 border-b">
                     <div class="flex items-center justify-between">
                         <h2 class="text-2xl font-bold text-gray-800">Shopping Cart</h2>
@@ -600,10 +604,10 @@ html lang="en">
     <!-- Checkout Modal -->
     <div id="checkoutModal" class="hidden fixed inset-0 z-50 modal-backdrop">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-                <div class="p-6 border-b">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden mx-4">
+                <div class="p-4 md:p-6 border-b">
                     <div class="flex items-center justify-between">
-                        <h2 class="text-2xl font-bold text-gray-800">Checkout</h2>
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-800">Checkout</h2>
                         <button onclick="closeModal('checkoutModal')" class="text-gray-400 hover:text-gray-600">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -611,8 +615,8 @@ html lang="en">
                         </button>
                     </div>
                 </div>
-                <div class="p-6 max-h-[70vh] overflow-y-auto">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="p-4 md:p-6 max-h-[70vh] overflow-y-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                         <div>
                             <h3 class="text-lg font-semibold mb-4">Shipping Information</h3>
                             <form id="checkoutForm" class="space-y-4">
@@ -703,7 +707,7 @@ html lang="en">
     <!-- Donate Modal -->
     <div id="donateModal" class="hidden fixed inset-0 z-50 modal-backdrop">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden mx-4">
                 <div class="p-6 border-b">
                     <div class="flex items-center justify-between">
                         <h2 class="text-2xl font-bold text-gray-800">Donate Products</h2>
@@ -805,7 +809,7 @@ html lang="en">
     <!-- Search Modal -->
     <div id="searchModal" class="hidden fixed inset-0 z-50 modal-backdrop">
         <div class="flex items-start justify-center min-h-screen p-4 pt-20">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4">
                 <div class="p-6">
                     <div class="flex items-center space-x-4 mb-6">
                         <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -834,7 +838,7 @@ html lang="en">
     <!-- Wishlist Modal -->
     <div id="wishlistModal" class="hidden fixed inset-0 z-50 modal-backdrop">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden mx-4">
                 <div class="p-6 border-b">
                     <div class="flex items-center justify-between">
                         <h2 class="text-2xl font-bold text-gray-800">My Wishlist</h2>
@@ -855,7 +859,7 @@ html lang="en">
     <!-- Admin Login Modal -->
     <div id="adminModal" class="hidden fixed inset-0 z-50 modal-backdrop">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8 mx-4">
                 <div class="text-center mb-8">
                     <div class="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2042,5 +2046,5 @@ html lang="en">
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9766c4eea463d11d',t:'MTc1NjQxNTE1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9767463921641fd5',t:'MTc1NjQyMDQ0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
