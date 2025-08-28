@@ -151,36 +151,39 @@ html lang="en">
                     </div>
                 </div>
 
-                <!-- Right side buttons -->
-                <div class="flex items-center space-x-2 md:space-x-4">
+                <!-- Right side buttons - Desktop only -->
+                <div class="hidden md:flex items-center space-x-4">
                     <button onclick="showSearchModal()" class="relative p-2 text-gray-600 hover:text-primary transition-colors">
-                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </button>
                     <button onclick="showWishlist()" class="relative p-2 text-gray-600 hover:text-primary transition-colors">
-                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                         </svg>
-                        <span id="wishlistCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 md:h-5 md:w-5 flex items-center justify-center text-xs">0</span>
+                        <span id="wishlistCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center text-xs">0</span>
                     </button>
                     <button onclick="showCart()" class="relative p-2 text-gray-600 hover:text-primary transition-colors">
-                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 13v4a2 2 0 01-2 2H9a2 2 0 01-2-2v-4m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
                         </svg>
-                        <span id="cartCount" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-4 w-4 md:h-5 md:w-5 flex items-center justify-center text-xs">0</span>
+                        <span id="cartCount" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center text-xs">0</span>
                     </button>
                     <!-- Desktop Sign In Button -->
-                    <button onclick="showAuthModal()" id="authBtn" class="hidden md:block bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm">
+                    <button onclick="showAuthModal()" id="authBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm">
                         Sign In
                     </button>
                     <!-- Desktop User Menu -->
                     <div id="userMenu" class="hidden relative">
-                        <button onclick="toggleUserMenu()" class="flex items-center space-x-2 text-gray-700 hover:text-primary">
-                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                        <button onclick="toggleUserMenu()" class="flex items-center space-x-2 text-gray-700 hover:text-primary p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                                 <span id="userInitials" class="text-white text-sm font-medium"></span>
                             </div>
-                            <span id="userName" class="font-medium hidden md:block"></span>
+                            <span id="userName" class="font-medium hidden lg:block text-sm truncate max-w-24"></span>
+                            <svg class="w-4 h-4 text-gray-400 hidden lg:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
                         <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50">
                             <a href="#" onclick="showProfile()" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">My Profile</a>
@@ -209,9 +212,37 @@ html lang="en">
                 <a href="#home" class="block px-3 py-2 text-gray-900 font-medium">Home</a>
                 <a href="#categories" class="block px-3 py-2 text-gray-600 hover:text-primary">Categories</a>
                 <a href="#products" class="block px-3 py-2 text-gray-600 hover:text-primary">Products</a>
-                <button onclick="showDonateModal()" class="block w-full text-left px-3 py-2 text-gray-600 hover:text-primary">Donate Products</button>
+                <button onclick="showDonateModal(); toggleMobileMenu();" class="block w-full text-left px-3 py-2 text-gray-600 hover:text-primary">Donate Products</button>
                 <a href="adminlogin.html" class="block px-3 py-2 text-gray-600 hover:text-primary">Admin</a>
                 <a href="#contact" class="block px-3 py-2 text-gray-600 hover:text-primary">Contact</a>
+                
+                <!-- Mobile Action Buttons -->
+                <div class="border-t border-gray-200 pt-3 mt-3">
+                    <button onclick="showSearchModal(); toggleMobileMenu();" class="flex items-center w-full px-3 py-2 text-gray-600 hover:text-primary">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Search Products
+                    </button>
+                    <button onclick="showWishlist(); toggleMobileMenu();" class="flex items-center justify-between w-full px-3 py-2 text-gray-600 hover:text-primary">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            My Wishlist
+                        </div>
+                        <span id="mobileWishlistCount" class="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="showCart(); toggleMobileMenu();" class="flex items-center justify-between w-full px-3 py-2 text-gray-600 hover:text-primary">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 13v4a2 2 0 01-2 2H9a2 2 0 01-2-2v-4m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                            </svg>
+                            Shopping Cart
+                        </div>
+                        <span id="mobileCartCount" class="bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                </div>
                 
                 <!-- Mobile Auth Section -->
                 <div class="border-t border-gray-200 pt-3 mt-3">
@@ -782,6 +813,21 @@ html lang="en">
                         </div>
                         
                         <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
+                                <input type="file" id="donateImages" multiple accept="image/*" class="hidden" onchange="handleImageUpload(this)">
+                                <div id="imageUploadArea" class="cursor-pointer" onclick="document.getElementById('donateImages').click()">
+                                    <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                    <p class="text-gray-600 mb-2">Click to upload product images</p>
+                                    <p class="text-sm text-gray-500">PNG, JPG, GIF up to 10MB each (max 5 images)</p>
+                                </div>
+                                <div id="imagePreview" class="mt-4 grid grid-cols-2 gap-4 hidden"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                             <textarea id="donateDescription" required rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Describe the product, its features, and why you're donating it..."></textarea>
                         </div>
@@ -1102,7 +1148,7 @@ html lang="en">
                                 </div>
                             </div>
                             <div class="p-6 max-h-[70vh] overflow-y-auto">
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                                     <div class="bg-blue-50 rounded-lg p-6 text-center">
                                         <div class="text-3xl font-bold text-blue-600">${products.length}</div>
                                         <div class="text-blue-800 font-medium">Total Products</div>
@@ -1115,9 +1161,13 @@ html lang="en">
                                         <div class="text-3xl font-bold text-purple-600">${JSON.parse(localStorage.getItem('bomassDonations') || '[]').length}</div>
                                         <div class="text-purple-800 font-medium">Donations</div>
                                     </div>
+                                    <div class="bg-orange-50 rounded-lg p-6 text-center">
+                                        <div class="text-3xl font-bold text-orange-600">${getAdminNotifications().filter(n => !n.read).length}</div>
+                                        <div class="text-orange-800 font-medium">New Notifications</div>
+                                    </div>
                                 </div>
                                 
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div class="bg-gray-50 rounded-lg p-6">
                                         <h3 class="text-lg font-semibold mb-4">Recent Orders</h3>
                                         <div class="space-y-3">
@@ -1152,6 +1202,31 @@ html lang="en">
                                                 </div>
                                             `).join('') || '<p class="text-gray-500 text-center py-4">No donations yet</p>'}
                                         </div>
+                                    </div>
+                                    
+                                    <div class="bg-gray-50 rounded-lg p-6">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <h3 class="text-lg font-semibold">Notifications</h3>
+                                            <span class="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">${getAdminNotifications().filter(n => !n.read).length}</span>
+                                        </div>
+                                        <div class="space-y-3 max-h-64 overflow-y-auto">
+                                            ${getAdminNotifications().slice(0, 5).map(notification => `
+                                                <div class="p-3 bg-white rounded-lg border-l-4 ${notification.read ? 'border-gray-300' : 'border-orange-500'}">
+                                                    <div class="flex items-start justify-between">
+                                                        <div class="flex-1">
+                                                            <div class="text-sm font-medium ${notification.read ? 'text-gray-600' : 'text-gray-900'}">${notification.data.message}</div>
+                                                            <div class="text-xs text-gray-500 mt-1">${new Date(notification.timestamp).toLocaleString()}</div>
+                                                        </div>
+                                                        ${!notification.read ? '<div class="w-2 h-2 bg-orange-500 rounded-full ml-2 mt-1"></div>' : ''}
+                                                    </div>
+                                                </div>
+                                            `).join('') || '<p class="text-gray-500 text-center py-4">No notifications</p>'}
+                                        </div>
+                                        ${getAdminNotifications().length > 5 ? `
+                                            <button onclick="showAllNotifications()" class="w-full mt-3 text-sm text-primary hover:text-primary/80 font-medium">
+                                                View All Notifications (${getAdminNotifications().length})
+                                            </button>
+                                        ` : ''}
                                     </div>
                                 </div>
                                 
@@ -1322,20 +1397,28 @@ html lang="en">
             productsGrid.innerHTML = productsToShow.map(product => `
                 <div class="product-card rounded-2xl overflow-hidden card-hover border border-gray-200">
                     <div class="relative">
-                        <div class="h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                            <div class="text-6xl">${product.image}</div>
+                        <div class="h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
+                            ${product.image.startsWith('data:image') ? 
+                                `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">` : 
+                                `<div class="text-6xl">${product.image}</div>`
+                            }
                         </div>
-                        ${product.originalPrice ? `
-                            <div class="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-lg text-sm font-medium">
+                        ${product.isDonated ? `
+                            <div class="absolute top-4 left-4 bg-green-500 text-white px-2 py-1 rounded-lg text-sm font-medium">
+                                💝 Donated
+                            </div>
+                        ` : ''}
+                        ${product.originalPrice && !product.isDonated ? `
+                            <div class="absolute top-4 ${product.isDonated ? 'left-20' : 'left-4'} bg-red-500 text-white px-2 py-1 rounded-lg text-sm font-medium">
                                 -${Math.round((1 - product.price / product.originalPrice) * 100)}%
                             </div>
                         ` : ''}
                         ${product.featured ? `
-                            <div class="absolute top-4 ${product.originalPrice ? 'right-4' : 'left-4'} bg-blue-500 text-white px-2 py-1 rounded-lg text-sm font-medium">
+                            <div class="absolute top-4 right-4 bg-blue-500 text-white px-2 py-1 rounded-lg text-sm font-medium">
                                 Featured
                             </div>
                         ` : ''}
-                        <button onclick="toggleWishlist(${product.id})" class="absolute top-4 right-4 p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors">
+                        <button onclick="toggleWishlist(${product.id})" class="absolute ${product.featured ? 'top-12 right-4' : 'top-4 right-4'} p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors">
                             <svg class="w-5 h-5 ${wishlist.some(item => item.id === product.id) ? 'text-red-500' : 'text-gray-600'}" fill="${wishlist.some(item => item.id === product.id) ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                             </svg>
@@ -1344,6 +1427,13 @@ html lang="en">
                     <div class="p-6">
                         <h3 class="font-semibold text-gray-900 mb-2">${product.name}</h3>
                         <p class="text-gray-600 text-sm mb-3">${product.description}</p>
+                        ${product.isDonated ? `
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-2 mb-3">
+                                <p class="text-xs text-green-700">
+                                    <span class="font-medium">Donated by:</span> ${product.donorName}
+                                </p>
+                            </div>
+                        ` : ''}
                         <div class="flex items-center mb-3">
                             <div class="flex text-yellow-400">
                                 ${'⭐'.repeat(product.rating)}${'☆'.repeat(5 - product.rating)}
@@ -1352,11 +1442,14 @@ html lang="en">
                         </div>
                         <div class="flex items-center justify-between">
                             <div>
-                                <span class="text-2xl font-bold text-gray-900">₦${product.price.toLocaleString()}</span>
-                                ${product.originalPrice ? `<span class="text-sm text-gray-500 line-through ml-2">₦${product.originalPrice.toLocaleString()}</span>` : ''}
+                                ${product.isDonated ? 
+                                    `<span class="text-2xl font-bold text-green-600">FREE</span>` :
+                                    `<span class="text-2xl font-bold text-gray-900">₦${product.price.toLocaleString()}</span>
+                                     ${product.originalPrice ? `<span class="text-sm text-gray-500 line-through ml-2">₦${product.originalPrice.toLocaleString()}</span>` : ''}`
+                                }
                             </div>
                             <button onclick="addToCart(${product.id})" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-                                Add to Cart
+                                ${product.isDonated ? 'Claim Free' : 'Add to Cart'}
                             </button>
                         </div>
                     </div>
@@ -1461,6 +1554,7 @@ html lang="en">
         function updateCartUI() {
             const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
             document.getElementById('cartCount').textContent = cartCount;
+            document.getElementById('mobileCartCount').textContent = cartCount;
         }
 
         function toggleWishlist(productId) {
@@ -1488,6 +1582,7 @@ html lang="en">
 
         function updateWishlistUI() {
             document.getElementById('wishlistCount').textContent = wishlist.length;
+            document.getElementById('mobileWishlistCount').textContent = wishlist.length;
         }
 
         // Modal functions
@@ -1892,33 +1987,199 @@ html lang="en">
             showNotification('Logged out successfully', 'info');
         }
 
+        // Image upload handler
+        function handleImageUpload(input) {
+            const files = Array.from(input.files);
+            const imagePreview = document.getElementById('imagePreview');
+            const imageUploadArea = document.getElementById('imageUploadArea');
+            
+            if (files.length > 5) {
+                showNotification('Maximum 5 images allowed', 'warning');
+                input.value = '';
+                return;
+            }
+            
+            // Clear previous previews
+            imagePreview.innerHTML = '';
+            
+            if (files.length > 0) {
+                imagePreview.classList.remove('hidden');
+                imageUploadArea.style.display = 'none';
+                
+                files.forEach((file, index) => {
+                    if (file.size > 10 * 1024 * 1024) {
+                        showNotification(`Image ${index + 1} is too large. Max 10MB per image.`, 'warning');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imageDiv = document.createElement('div');
+                        imageDiv.className = 'relative group';
+                        imageDiv.innerHTML = `
+                            <img src="${e.target.result}" alt="Product image ${index + 1}" class="w-full h-24 object-cover rounded-lg border">
+                            <button type="button" onclick="removeImage(${index})" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                                ×
+                            </button>
+                        `;
+                        imagePreview.appendChild(imageDiv);
+                    };
+                    reader.readAsDataURL(file);
+                });
+                
+                // Add option to add more images
+                if (files.length < 5) {
+                    const addMoreDiv = document.createElement('div');
+                    addMoreDiv.className = 'border-2 border-dashed border-gray-300 rounded-lg h-24 flex items-center justify-center cursor-pointer hover:border-primary transition-colors';
+                    addMoreDiv.onclick = () => document.getElementById('donateImages').click();
+                    addMoreDiv.innerHTML = `
+                        <div class="text-center">
+                            <svg class="w-6 h-6 mx-auto text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            <p class="text-xs text-gray-500">Add more</p>
+                        </div>
+                    `;
+                    imagePreview.appendChild(addMoreDiv);
+                }
+            } else {
+                imagePreview.classList.add('hidden');
+                imageUploadArea.style.display = 'block';
+            }
+        }
+        
+        function removeImage(index) {
+            const input = document.getElementById('donateImages');
+            const dt = new DataTransfer();
+            const files = Array.from(input.files);
+            
+            files.forEach((file, i) => {
+                if (i !== index) {
+                    dt.items.add(file);
+                }
+            });
+            
+            input.files = dt.files;
+            handleImageUpload(input);
+        }
+
         // Donation functions
         function handleDonation(e) {
             e.preventDefault();
             
-            const formData = {
-                productName: document.getElementById('donateProductName').value,
-                category: document.getElementById('donateCategory').value,
-                condition: document.getElementById('donateCondition').value,
-                description: document.getElementById('donateDescription').value,
-                donorName: document.getElementById('donorName').value,
-                donorEmail: document.getElementById('donorEmail').value,
-                donorPhone: document.getElementById('donorPhone').value,
-                pickupLocation: document.getElementById('pickupLocation').value,
-                submissionDate: new Date().toISOString(),
-                id: 'DON-' + Date.now()
-            };
-
-            // Save donation to localStorage
-            const donations = JSON.parse(localStorage.getItem('bomassDonations') || '[]');
-            donations.push(formData);
-            localStorage.setItem('bomassDonations', JSON.stringify(donations));
-
-            closeModal('donateModal');
-            showDonationConfirmation(formData);
+            const images = Array.from(document.getElementById('donateImages').files);
+            const imageData = [];
             
-            // Reset form
-            document.getElementById('donateForm').reset();
+            // Convert images to base64 for storage
+            const processImages = async () => {
+                for (const file of images) {
+                    const base64 = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.readAsDataURL(file);
+                    });
+                    imageData.push({
+                        name: file.name,
+                        data: base64,
+                        size: file.size
+                    });
+                }
+                
+                const donationData = {
+                    productName: document.getElementById('donateProductName').value,
+                    category: document.getElementById('donateCategory').value,
+                    condition: document.getElementById('donateCondition').value,
+                    description: document.getElementById('donateDescription').value,
+                    donorName: document.getElementById('donorName').value,
+                    donorEmail: document.getElementById('donorEmail').value,
+                    donorPhone: document.getElementById('donorPhone').value,
+                    pickupLocation: document.getElementById('pickupLocation').value,
+                    images: imageData,
+                    submissionDate: new Date().toISOString(),
+                    id: 'DON-' + Date.now(),
+                    status: 'pending'
+                };
+
+                // Save donation to localStorage
+                const donations = JSON.parse(localStorage.getItem('bomassDonations') || '[]');
+                donations.push(donationData);
+                localStorage.setItem('bomassDonations', JSON.stringify(donations));
+                
+                // Add admin notification for new donation
+                addAdminNotification('donation', {
+                    type: 'new_donation',
+                    donationId: donationData.id,
+                    productName: donationData.productName,
+                    donorName: donationData.donorName,
+                    category: donationData.category,
+                    message: `New product donation: ${donationData.productName} from ${donationData.donorName}`,
+                    timestamp: new Date().toISOString()
+                });
+                
+                // Add to featured products after approval simulation
+                setTimeout(() => {
+                    addDonationToProducts(donationData);
+                    
+                    // Add notification when product goes live
+                    addAdminNotification('product_live', {
+                        type: 'donation_approved',
+                        donationId: donationData.id,
+                        productName: donationData.productName,
+                        message: `Donated product "${donationData.productName}" is now live on the store`,
+                        timestamp: new Date().toISOString()
+                    });
+                }, 2000);
+
+                closeModal('donateModal');
+                showDonationConfirmation(donationData);
+                
+                // Reset form
+                document.getElementById('donateForm').reset();
+                document.getElementById('imagePreview').classList.add('hidden');
+                document.getElementById('imageUploadArea').style.display = 'block';
+            };
+            
+            processImages();
+        }
+        
+        function addDonationToProducts(donation) {
+            // Create a new product from donation
+            const newProduct = {
+                id: products.length + 1,
+                name: donation.productName,
+                category: donation.category,
+                price: 0, // Donated products are free
+                originalPrice: null,
+                image: donation.images.length > 0 ? donation.images[0].data : getEmojiForCategory(donation.category),
+                rating: 5,
+                reviews: 0,
+                description: donation.description + " (Donated Product)",
+                inStock: true,
+                featured: true,
+                isDonated: true,
+                donorName: donation.donorName,
+                donationId: donation.id
+            };
+            
+            products.unshift(newProduct); // Add to beginning of array
+            filteredProducts = [...products];
+            displayProducts();
+            
+            showNotification(`${donation.productName} has been added to featured products!`, 'success');
+        }
+        
+        function getEmojiForCategory(category) {
+            const categoryEmojis = {
+                'electronics': '📱',
+                'fashion': '👕',
+                'home': '🏠',
+                'beauty': '💄',
+                'sports': '⚽',
+                'books': '📚',
+                'toys': '🧸',
+                'other': '📦'
+            };
+            return categoryEmojis[category] || '📦';
         }
 
         function showDonationConfirmation(donation) {
@@ -2005,12 +2266,59 @@ html lang="en">
             // Save subscription to localStorage
             const subscriptions = JSON.parse(localStorage.getItem('bomassSubscriptions') || '[]');
             if (!subscriptions.includes(email)) {
-                subscriptions.push(email);
+                subscriptions.push({
+                    email: email,
+                    subscribeDate: new Date().toISOString(),
+                    id: 'SUB-' + Date.now()
+                });
                 localStorage.setItem('bomassSubscriptions', JSON.stringify(subscriptions));
+                
+                // Add admin notification
+                addAdminNotification('newsletter', {
+                    type: 'newsletter_subscription',
+                    email: email,
+                    message: `New newsletter subscription from ${email}`,
+                    timestamp: new Date().toISOString()
+                });
+                
                 showNotification('Successfully subscribed to newsletter!', 'success');
                 document.getElementById('newsletterEmail').value = '';
             } else {
                 showNotification('Email already subscribed', 'info');
+            }
+        }
+        
+        // Admin notification system
+        function addAdminNotification(type, data) {
+            const notifications = JSON.parse(localStorage.getItem('bomassAdminNotifications') || '[]');
+            const notification = {
+                id: 'NOTIF-' + Date.now(),
+                type: type,
+                data: data,
+                timestamp: new Date().toISOString(),
+                read: false
+            };
+            
+            notifications.unshift(notification); // Add to beginning
+            
+            // Keep only last 50 notifications
+            if (notifications.length > 50) {
+                notifications.splice(50);
+            }
+            
+            localStorage.setItem('bomassAdminNotifications', JSON.stringify(notifications));
+        }
+        
+        function getAdminNotifications() {
+            return JSON.parse(localStorage.getItem('bomassAdminNotifications') || '[]');
+        }
+        
+        function markNotificationAsRead(notificationId) {
+            const notifications = getAdminNotifications();
+            const notification = notifications.find(n => n.id === notificationId);
+            if (notification) {
+                notification.read = true;
+                localStorage.setItem('bomassAdminNotifications', JSON.stringify(notifications));
             }
         }
 
@@ -2057,13 +2365,329 @@ html lang="en">
         }
 
         function showOrders() {
-            // Implementation for orders modal
-            showNotification('Orders feature coming soon!', 'info');
+            if (!currentUser) {
+                showNotification('Please sign in to view orders', 'warning');
+                showAuthModal();
+                return;
+            }
+            
+            const orders = JSON.parse(localStorage.getItem('bomassOrders') || '[]');
+            const userOrders = orders.filter(order => order.customer.email === currentUser.email);
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-50 modal-backdrop';
+            modal.innerHTML = `
+                <div class="flex items-center justify-center min-h-screen p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+                        <div class="p-6 border-b">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-2xl font-bold text-gray-800">My Orders</h2>
+                                <button onclick="this.closest('.modal-backdrop').remove()" class="text-gray-400 hover:text-gray-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 max-h-[70vh] overflow-y-auto">
+                            ${userOrders.length === 0 ? `
+                                <div class="text-center py-12">
+                                    <div class="text-6xl mb-4">📦</div>
+                                    <h3 class="text-xl font-semibold text-gray-800 mb-2">No Orders Yet</h3>
+                                    <p class="text-gray-600 mb-6">You haven't placed any orders yet. Start shopping to see your orders here!</p>
+                                    <button onclick="this.closest('.modal-backdrop').remove(); document.getElementById('products').scrollIntoView({behavior: 'smooth'});" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                                        Start Shopping
+                                    </button>
+                                </div>
+                            ` : `
+                                <div class="space-y-6">
+                                    ${userOrders.map(order => `
+                                        <div class="border border-gray-200 rounded-lg p-6">
+                                            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                                                <div>
+                                                    <h3 class="text-lg font-semibold text-gray-900">Order ${order.id}</h3>
+                                                    <p class="text-sm text-gray-600">Placed on ${new Date(order.date).toLocaleDateString()}</p>
+                                                </div>
+                                                <div class="mt-2 md:mt-0">
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                                                        order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                        order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                                                        order.status === 'shipped' ? 'bg-purple-100 text-purple-800' :
+                                                        order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                                                        'bg-gray-100 text-gray-800'
+                                                    }">
+                                                        ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-900 mb-3">Items Ordered</h4>
+                                                    <div class="space-y-2">
+                                                        ${order.items.map(item => `
+                                                            <div class="flex items-center space-x-3">
+                                                                <span class="text-2xl">${item.image}</span>
+                                                                <div class="flex-1">
+                                                                    <p class="text-sm font-medium text-gray-900">${item.name}</p>
+                                                                    <p class="text-sm text-gray-600">Qty: ${item.quantity} × ₦${item.price.toLocaleString()}</p>
+                                                                </div>
+                                                                <span class="text-sm font-medium">₦${(item.price * item.quantity).toLocaleString()}</span>
+                                                            </div>
+                                                        `).join('')}
+                                                    </div>
+                                                </div>
+                                                
+                                                <div>
+                                                    <h4 class="font-medium text-gray-900 mb-3">Order Summary</h4>
+                                                    <div class="space-y-2 text-sm">
+                                                        <div class="flex justify-between">
+                                                            <span>Subtotal:</span>
+                                                            <span>₦${order.subtotal.toLocaleString()}</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span>Shipping:</span>
+                                                            <span>${order.shipping === 0 ? 'Free' : '₦' + order.shipping.toLocaleString()}</span>
+                                                        </div>
+                                                        <div class="flex justify-between font-semibold text-base border-t pt-2">
+                                                            <span>Total:</span>
+                                                            <span>₦${order.total.toLocaleString()}</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="mt-4">
+                                                        <h5 class="font-medium text-gray-900 mb-2">Delivery Address</h5>
+                                                        <p class="text-sm text-gray-600">
+                                                            ${order.customer.firstName} ${order.customer.lastName}<br>
+                                                            ${order.customer.address}<br>
+                                                            ${order.customer.city}, ${order.customer.state}<br>
+                                                            ${order.customer.phone}
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    <div class="mt-4">
+                                                        <h5 class="font-medium text-gray-900 mb-2">Payment Method</h5>
+                                                        <p class="text-sm text-gray-600">
+                                                            ${order.paymentMethod === 'card' ? '💳 Credit/Debit Card' :
+                                                              order.paymentMethod === 'transfer' ? '🏦 Bank Transfer' :
+                                                              '💰 Cash on Delivery'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                                                <button onclick="trackOrder('${order.id}')" class="flex-1 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                                                    Track Order
+                                                </button>
+                                                <button onclick="reorderItems('${order.id}')" class="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                                                    Reorder Items
+                                                </button>
+                                                ${order.status === 'delivered' ? `
+                                                    <button onclick="leaveReview('${order.id}')" class="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                                                        Leave Review
+                                                    </button>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
         }
 
         function showDonations() {
-            // Implementation for donations modal
-            showNotification('Donations history coming soon!', 'info');
+            if (!currentUser) {
+                showNotification('Please sign in to view donations', 'warning');
+                showAuthModal();
+                return;
+            }
+            
+            const donations = JSON.parse(localStorage.getItem('bomassDonations') || '[]');
+            const userDonations = donations.filter(donation => donation.donorEmail === currentUser.email);
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-50 modal-backdrop';
+            modal.innerHTML = `
+                <div class="flex items-center justify-center min-h-screen p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+                        <div class="p-6 border-b">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-2xl font-bold text-gray-800">My Donations</h2>
+                                <button onclick="this.closest('.modal-backdrop').remove()" class="text-gray-400 hover:text-gray-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 max-h-[70vh] overflow-y-auto">
+                            ${userDonations.length === 0 ? `
+                                <div class="text-center py-12">
+                                    <div class="text-6xl mb-4">💝</div>
+                                    <h3 class="text-xl font-semibold text-gray-800 mb-2">No Donations Yet</h3>
+                                    <p class="text-gray-600 mb-6">You haven't made any donations yet. Share the joy by donating products you no longer need!</p>
+                                    <button onclick="this.closest('.modal-backdrop').remove(); showDonateModal();" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                                        Donate Now
+                                    </button>
+                                </div>
+                            ` : `
+                                <div class="space-y-6">
+                                    ${userDonations.map(donation => `
+                                        <div class="border border-gray-200 rounded-lg p-6">
+                                            <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
+                                                <div class="flex-1">
+                                                    <h3 class="text-lg font-semibold text-gray-900">${donation.productName}</h3>
+                                                    <p class="text-sm text-gray-600">Donated on ${new Date(donation.submissionDate).toLocaleDateString()}</p>
+                                                    <p class="text-sm text-gray-600">Donation ID: ${donation.id}</p>
+                                                </div>
+                                                <div class="mt-2 md:mt-0">
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                                                        donation.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                        donation.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                                        donation.status === 'picked_up' ? 'bg-blue-100 text-blue-800' :
+                                                        donation.status === 'live' ? 'bg-purple-100 text-purple-800' :
+                                                        'bg-gray-100 text-gray-800'
+                                                    }">
+                                                        ${donation.status === 'pending' ? '⏳ Pending Review' :
+                                                          donation.status === 'approved' ? '✅ Approved' :
+                                                          donation.status === 'picked_up' ? '📦 Picked Up' :
+                                                          donation.status === 'live' ? '🌟 Live on Store' :
+                                                          donation.status.charAt(0).toUpperCase() + donation.status.slice(1)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-900 mb-3">Product Details</h4>
+                                                    <div class="space-y-2 text-sm">
+                                                        <div class="flex justify-between">
+                                                            <span class="text-gray-600">Category:</span>
+                                                            <span class="font-medium">${donation.category.charAt(0).toUpperCase() + donation.category.slice(1)}</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span class="text-gray-600">Condition:</span>
+                                                            <span class="font-medium">${donation.condition.charAt(0).toUpperCase() + donation.condition.slice(1)}</span>
+                                                        </div>
+                                                        <div class="flex justify-between">
+                                                            <span class="text-gray-600">Images:</span>
+                                                            <span class="font-medium">${donation.images.length} uploaded</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="mt-4">
+                                                        <h5 class="font-medium text-gray-900 mb-2">Description</h5>
+                                                        <p class="text-sm text-gray-600">${donation.description}</p>
+                                                    </div>
+                                                    
+                                                    ${donation.images.length > 0 ? `
+                                                        <div class="mt-4">
+                                                            <h5 class="font-medium text-gray-900 mb-2">Product Images</h5>
+                                                            <div class="grid grid-cols-3 gap-2">
+                                                                ${donation.images.slice(0, 3).map(image => `
+                                                                    <img src="${image.data}" alt="Product image" class="w-full h-16 object-cover rounded-lg border">
+                                                                `).join('')}
+                                                                ${donation.images.length > 3 ? `
+                                                                    <div class="w-full h-16 bg-gray-100 rounded-lg border flex items-center justify-center text-xs text-gray-500">
+                                                                        +${donation.images.length - 3} more
+                                                                    </div>
+                                                                ` : ''}
+                                                            </div>
+                                                        </div>
+                                                    ` : ''}
+                                                </div>
+                                                
+                                                <div>
+                                                    <h4 class="font-medium text-gray-900 mb-3">Pickup Information</h4>
+                                                    <div class="space-y-2 text-sm">
+                                                        <div>
+                                                            <span class="text-gray-600">Contact:</span>
+                                                            <p class="font-medium">${donation.donorName}</p>
+                                                            <p class="text-gray-600">${donation.donorPhone}</p>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-gray-600">Pickup Address:</span>
+                                                            <p class="font-medium">${donation.pickupLocation}</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="mt-4">
+                                                        <h5 class="font-medium text-gray-900 mb-2">Status Timeline</h5>
+                                                        <div class="space-y-2">
+                                                            <div class="flex items-center text-sm">
+                                                                <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                                                                <span class="text-gray-600">Donation submitted</span>
+                                                            </div>
+                                                            ${donation.status !== 'pending' ? `
+                                                                <div class="flex items-center text-sm">
+                                                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                                                                    <span class="text-gray-600">Review completed</span>
+                                                                </div>
+                                                            ` : `
+                                                                <div class="flex items-center text-sm">
+                                                                    <div class="w-2 h-2 bg-gray-300 rounded-full mr-3"></div>
+                                                                    <span class="text-gray-400">Pending review</span>
+                                                                </div>
+                                                            `}
+                                                            ${donation.status === 'picked_up' || donation.status === 'live' ? `
+                                                                <div class="flex items-center text-sm">
+                                                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                                                                    <span class="text-gray-600">Product picked up</span>
+                                                                </div>
+                                                            ` : `
+                                                                <div class="flex items-center text-sm">
+                                                                    <div class="w-2 h-2 bg-gray-300 rounded-full mr-3"></div>
+                                                                    <span class="text-gray-400">Awaiting pickup</span>
+                                                                </div>
+                                                            `}
+                                                            ${donation.status === 'live' ? `
+                                                                <div class="flex items-center text-sm">
+                                                                    <div class="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                                                                    <span class="text-purple-600 font-medium">Live on store!</span>
+                                                                </div>
+                                                            ` : ''}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                                                ${donation.status === 'live' ? `
+                                                    <button onclick="viewDonatedProduct('${donation.id}')" class="flex-1 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                                                        View on Store
+                                                    </button>
+                                                ` : ''}
+                                                <button onclick="contactSupport('${donation.id}')" class="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                                                    Contact Support
+                                                </button>
+                                                ${donation.status === 'pending' ? `
+                                                    <button onclick="editDonation('${donation.id}')" class="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                                                        Edit Details
+                                                    </button>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `}
+                        </div>
+                        <div class="p-6 border-t bg-gray-50">
+                            <div class="text-center">
+                                <p class="text-sm text-gray-600 mb-4">Thank you for your generosity! Your donations help others in need.</p>
+                                <button onclick="this.closest('.modal-backdrop').remove(); showDonateModal();" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors">
+                                    Donate More Items
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
         }
 
         function showTrackOrder() {
@@ -2081,6 +2705,110 @@ html lang="en">
         function showSupport() {
             showNotification('Support chat coming soon!', 'info');
         }
+        
+        function showAllNotifications() {
+            const notifications = getAdminNotifications();
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-50 modal-backdrop';
+            modal.innerHTML = `
+                <div class="flex items-center justify-center min-h-screen p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+                        <div class="p-6 border-b">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-2xl font-bold text-gray-800">All Notifications</h2>
+                                <button onclick="this.closest('.modal-backdrop').remove()" class="text-gray-400 hover:text-gray-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 max-h-[70vh] overflow-y-auto">
+                            <div class="space-y-4">
+                                ${notifications.map(notification => `
+                                    <div class="p-4 bg-gray-50 rounded-lg border-l-4 ${notification.read ? 'border-gray-300' : 'border-orange-500'}">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <div class="flex items-center mb-2">
+                                                    <span class="text-sm font-medium ${notification.read ? 'text-gray-600' : 'text-gray-900'}">${notification.data.message}</span>
+                                                    ${!notification.read ? '<div class="w-2 h-2 bg-orange-500 rounded-full ml-2"></div>' : ''}
+                                                </div>
+                                                <div class="text-xs text-gray-500">${new Date(notification.timestamp).toLocaleString()}</div>
+                                                <div class="text-xs text-gray-400 mt-1">Type: ${notification.data.type}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('') || '<p class="text-gray-500 text-center py-8">No notifications</p>'}
+                            </div>
+                        </div>
+                        <div class="p-6 border-t bg-gray-50">
+                            <button onclick="markAllNotificationsAsRead(); this.closest('.modal-backdrop').remove();" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 transition-colors">
+                                Mark All as Read
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        function markAllNotificationsAsRead() {
+            const notifications = getAdminNotifications();
+            notifications.forEach(notification => {
+                notification.read = true;
+            });
+            localStorage.setItem('bomassAdminNotifications', JSON.stringify(notifications));
+            showNotification('All notifications marked as read', 'success');
+        }
+
+        // Helper functions for orders and donations
+        function trackOrder(orderId) {
+            showNotification(`Tracking order ${orderId}. You'll receive SMS updates!`, 'info');
+        }
+
+        function reorderItems(orderId) {
+            const orders = JSON.parse(localStorage.getItem('bomassOrders') || '[]');
+            const order = orders.find(o => o.id === orderId);
+            
+            if (order) {
+                // Add all items from the order back to cart
+                order.items.forEach(item => {
+                    const existingItem = cart.find(cartItem => cartItem.id === item.id);
+                    if (existingItem) {
+                        existingItem.quantity += item.quantity;
+                    } else {
+                        cart.push({ ...item });
+                    }
+                });
+                
+                localStorage.setItem('bomassCart', JSON.stringify(cart));
+                updateCartUI();
+                showNotification(`${order.items.length} items added to cart!`, 'success');
+            }
+        }
+
+        function leaveReview(orderId) {
+            showNotification('Review feature coming soon!', 'info');
+        }
+
+        function viewDonatedProduct(donationId) {
+            // Find the donated product in the products array
+            const donatedProduct = products.find(p => p.donationId === donationId);
+            if (donatedProduct) {
+                document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+                showNotification('Scrolled to products section. Your donated item is featured!', 'success');
+            } else {
+                showNotification('Your donated product will appear once it goes live!', 'info');
+            }
+        }
+
+        function contactSupport(donationId) {
+            showNotification(`Support will contact you about donation ${donationId} within 24 hours`, 'info');
+        }
+
+        function editDonation(donationId) {
+            showNotification('Edit donation feature coming soon!', 'info');
+        }
 
         // Close user dropdown when clicking outside
         document.addEventListener('click', function(e) {
@@ -2092,5 +2820,5 @@ html lang="en">
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9767559d7383f533',t:'MTc1NjQyMTA3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976774657533d6fa',t:'MTc1NjQyMjMzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
