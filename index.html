@@ -636,6 +636,13 @@ html lang="en">
                     </button>
                 </form>
                 
+                <!-- Forgot Password Link - Only show during sign in -->
+                <div id="forgotPasswordLink" class="text-center mt-4">
+                    <button type="button" onclick="showForgotPassword()" class="text-primary hover:text-primary/80 text-sm font-medium">
+                        Forgot Password?
+                    </button>
+                </div>
+                
                 <button onclick="closeModal('authModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -945,6 +952,117 @@ html lang="en">
         </div>
     </div>
 
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 modal-backdrop">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8 mx-4">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                        </svg>
+                    </div>
+                    <h2 id="forgotPasswordTitle" class="text-3xl font-bold text-gray-800 mb-2">Reset Password</h2>
+                    <p id="forgotPasswordSubtitle" class="text-gray-600">Enter your email to receive a reset code</p>
+                </div>
+                
+                <!-- Step 1: Email Input -->
+                <div id="forgotPasswordStep1">
+                    <form id="forgotPasswordForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <input type="email" id="forgotEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Enter your email address">
+                        </div>
+                        <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                            <span id="sendOtpBtn">Send Verification Code</span>
+                            <div id="sendOtpSpinner" class="hidden flex items-center justify-center">
+                                <div class="pulse-loader mr-2"></div>
+                                <div class="pulse-loader mr-2"></div>
+                                <div class="pulse-loader"></div>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Step 2: OTP Verification -->
+                <div id="forgotPasswordStep2" class="hidden">
+                    <div class="text-center mb-6">
+                        <p class="text-gray-600 mb-2">We sent a 6-digit code to:</p>
+                        <p id="maskedEmail" class="font-medium text-gray-900"></p>
+                    </div>
+                    
+                    <form id="verifyOtpForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Enter Verification Code</label>
+                            <div class="flex justify-center space-x-2">
+                                <input type="text" id="otp1" maxlength="1" class="w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" onkeyup="moveToNext(this, 'otp2')" onkeydown="moveToPrev(this, null)">
+                                <input type="text" id="otp2" maxlength="1" class="w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" onkeyup="moveToNext(this, 'otp3')" onkeydown="moveToPrev(this, 'otp1')">
+                                <input type="text" id="otp3" maxlength="1" class="w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" onkeyup="moveToNext(this, 'otp4')" onkeydown="moveToPrev(this, 'otp2')">
+                                <input type="text" id="otp4" maxlength="1" class="w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" onkeyup="moveToNext(this, 'otp5')" onkeydown="moveToPrev(this, 'otp3')">
+                                <input type="text" id="otp5" maxlength="1" class="w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" onkeyup="moveToNext(this, 'otp6')" onkeydown="moveToPrev(this, 'otp4')">
+                                <input type="text" id="otp6" maxlength="1" class="w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" onkeyup="moveToNext(this, null)" onkeydown="moveToPrev(this, 'otp5')">
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button id="resendBtn" type="button" onclick="resendOtp()" class="text-primary hover:text-primary/80 text-sm font-medium">
+                                Didn't receive code? Resend
+                            </button>
+                            <div id="resendTimer" class="hidden text-sm text-gray-600">
+                                Resend code in <span id="timerCount">60</span>s
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                            <span id="verifyOtpBtn">Verify Code</span>
+                            <div id="verifyOtpSpinner" class="hidden flex items-center justify-center">
+                                <div class="pulse-loader mr-2"></div>
+                                <div class="pulse-loader mr-2"></div>
+                                <div class="pulse-loader"></div>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Step 3: New Password -->
+                <div id="forgotPasswordStep3" class="hidden">
+                    <form id="resetPasswordForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                            <input type="password" id="newPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Enter new password">
+                            <p class="text-xs text-gray-500 mt-1">Must be at least 8 characters with numbers and letters</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                            <input type="password" id="confirmNewPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Confirm new password">
+                        </div>
+                        <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                            <span id="resetPasswordBtn">Reset Password</span>
+                            <div id="resetPasswordSpinner" class="hidden flex items-center justify-center">
+                                <div class="pulse-loader mr-2"></div>
+                                <div class="pulse-loader mr-2"></div>
+                                <div class="pulse-loader"></div>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Back to Sign In -->
+                <div class="text-center mt-6">
+                    <button type="button" onclick="backToSignIn()" class="text-gray-600 hover:text-gray-800 text-sm">
+                        ← Back to Sign In
+                    </button>
+                </div>
+                
+                <button onclick="closeModal('forgotPasswordModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Admin Login Modal -->
     <div id="adminModal" class="hidden fixed inset-0 z-50 modal-backdrop">
         <div class="flex items-center justify-center min-h-screen p-4">
@@ -1069,6 +1187,11 @@ html lang="en">
 
             // Auth form submission
             document.getElementById('authForm').addEventListener('submit', handleAuth);
+
+            // Forgot Password forms
+            document.getElementById('forgotPasswordForm').addEventListener('submit', handleForgotPassword);
+            document.getElementById('verifyOtpForm').addEventListener('submit', handleOtpVerification);
+            document.getElementById('resetPasswordForm').addEventListener('submit', handlePasswordReset);
 
             // Admin form submission
             document.getElementById('adminForm').addEventListener('submit', handleAdminLogin);
@@ -2171,6 +2294,65 @@ html lang="en">
             document.body.appendChild(modal);
         }
 
+        // Password hashing utility (simple hash for demo - in production use bcrypt or similar)
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password + 'bomass_salt_2024'); // Add salt
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // User management functions
+        function saveUserToServer(userData) {
+            // Simulate server storage using localStorage (in production, this would be a real server)
+            const users = JSON.parse(localStorage.getItem('bomassUsers') || '[]');
+            users.push(userData);
+            localStorage.setItem('bomassUsers', JSON.stringify(users));
+            
+            // Add admin notification for new user registration
+            addAdminNotification('user_registration', {
+                type: 'new_user_registration',
+                userId: userData.id,
+                userName: userData.name,
+                userEmail: userData.email,
+                message: `New user registered: ${userData.name} (${userData.email})`,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        function getUserFromServer(email) {
+            // Simulate server lookup using localStorage (in production, this would be a real server API)
+            const users = JSON.parse(localStorage.getItem('bomassUsers') || '[]');
+            return users.find(user => user.email.toLowerCase() === email.toLowerCase());
+        }
+
+        async function verifyPassword(inputPassword, storedHash) {
+            const inputHash = await hashPassword(inputPassword);
+            return inputHash === storedHash;
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validatePassword(password) {
+            // Password must be at least 8 characters with at least one number and one letter
+            const minLength = password.length >= 8;
+            const hasNumber = /\d/.test(password);
+            const hasLetter = /[a-zA-Z]/.test(password);
+            
+            return {
+                isValid: minLength && hasNumber && hasLetter,
+                errors: [
+                    ...(minLength ? [] : ['Password must be at least 8 characters long']),
+                    ...(hasNumber ? [] : ['Password must contain at least one number']),
+                    ...(hasLetter ? [] : ['Password must contain at least one letter'])
+                ]
+            };
+        }
+
         // Authentication functions
         function switchAuthTab(tab) {
             const signinTab = document.getElementById('signinTab');
@@ -2179,6 +2361,10 @@ html lang="en">
             const confirmPasswordField = document.getElementById('confirmPasswordField');
             const authTitle = document.getElementById('authTitle');
             const authSubmitText = document.getElementById('authSubmitText');
+            const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+
+            // Clear any previous error states
+            clearFormErrors();
 
             if (tab === 'signin') {
                 signinTab.classList.add('bg-white', 'text-primary', 'shadow-sm');
@@ -2187,8 +2373,13 @@ html lang="en">
                 signupTab.classList.add('text-gray-600');
                 nameField.classList.add('hidden');
                 confirmPasswordField.classList.add('hidden');
+                forgotPasswordLink.classList.remove('hidden'); // Show forgot password link
                 authTitle.textContent = 'Welcome Back';
                 authSubmitText.textContent = 'Sign In';
+                
+                // Clear required attribute from hidden fields
+                document.getElementById('fullName').removeAttribute('required');
+                document.getElementById('confirmPassword').removeAttribute('required');
             } else {
                 signupTab.classList.add('bg-white', 'text-primary', 'shadow-sm');
                 signupTab.classList.remove('text-gray-600');
@@ -2196,45 +2387,232 @@ html lang="en">
                 signinTab.classList.add('text-gray-600');
                 nameField.classList.remove('hidden');
                 confirmPasswordField.classList.remove('hidden');
+                forgotPasswordLink.classList.add('hidden'); // Hide forgot password link
                 authTitle.textContent = 'Create Account';
                 authSubmitText.textContent = 'Sign Up';
+                
+                // Add required attribute to visible fields
+                document.getElementById('fullName').setAttribute('required', 'required');
+                document.getElementById('confirmPassword').setAttribute('required', 'required');
             }
         }
 
-        function handleAuth(e) {
+        function clearFormErrors() {
+            const inputs = ['email', 'password', 'fullName', 'confirmPassword'];
+            inputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                input.classList.remove('border-red-500');
+                
+                // Remove any existing error messages
+                const errorMsg = input.parentNode.querySelector('.error-message');
+                if (errorMsg) {
+                    errorMsg.remove();
+                }
+            });
+        }
+
+        function showFieldError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            field.classList.add('border-red-500');
+            
+            // Remove existing error message
+            const existingError = field.parentNode.querySelector('.error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            // Add new error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message text-red-500 text-sm mt-1';
+            errorDiv.textContent = message;
+            field.parentNode.appendChild(errorDiv);
+        }
+
+        async function handleAuth(e) {
             e.preventDefault();
             
             const isSignUp = !document.getElementById('nameField').classList.contains('hidden');
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const fullName = document.getElementById('fullName').value;
+            const fullName = document.getElementById('fullName').value.trim();
             const confirmPassword = document.getElementById('confirmPassword').value;
 
+            // Clear previous errors
+            clearFormErrors();
+
+            // Validate email
+            if (!validateEmail(email)) {
+                showFieldError('email', 'Please enter a valid email address');
+                return;
+            }
+
             if (isSignUp) {
-                if (password !== confirmPassword) {
-                    showNotification('Passwords do not match', 'error');
+                // Sign Up Process
+                
+                // Validate full name
+                if (!fullName || fullName.length < 2) {
+                    showFieldError('fullName', 'Please enter your full name (at least 2 characters)');
                     return;
                 }
-                if (password.length < 6) {
-                    showNotification('Password must be at least 6 characters', 'error');
+
+                // Validate password
+                const passwordValidation = validatePassword(password);
+                if (!passwordValidation.isValid) {
+                    showFieldError('password', passwordValidation.errors[0]);
                     return;
+                }
+
+                // Check password confirmation
+                if (password !== confirmPassword) {
+                    showFieldError('confirmPassword', 'Passwords do not match');
+                    return;
+                }
+
+                // Check if user already exists
+                const existingUser = getUserFromServer(email);
+                if (existingUser) {
+                    showFieldError('email', 'An account with this email already exists. Please sign in instead.');
+                    return;
+                }
+
+                // Show loading
+                showLoader('Creating your account...');
+
+                try {
+                    // Hash password
+                    const hashedPassword = await hashPassword(password);
+
+                    // Create user object
+                    const newUser = {
+                        id: 'USER-' + Date.now(),
+                        name: fullName,
+                        email: email.toLowerCase(),
+                        passwordHash: hashedPassword,
+                        joinDate: new Date().toISOString(),
+                        isActive: true,
+                        lastLogin: null,
+                        profile: {
+                            avatar: null,
+                            phone: null,
+                            address: null,
+                            preferences: {
+                                newsletter: true,
+                                notifications: true
+                            }
+                        }
+                    };
+
+                    // Simulate server delay
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    // Save user to "server"
+                    saveUserToServer(newUser);
+
+                    // Create session user (without password hash)
+                    const sessionUser = {
+                        id: newUser.id,
+                        name: newUser.name,
+                        email: newUser.email,
+                        joinDate: newUser.joinDate,
+                        profile: newUser.profile
+                    };
+
+                    currentUser = sessionUser;
+                    localStorage.setItem('bomassUser', JSON.stringify(sessionUser));
+                    
+                    hideLoader();
+                    updateAuthUI();
+                    closeModal('authModal');
+                    showNotification(`Welcome to Bomass Store, ${newUser.name}! Your account has been created successfully.`, 'success');
+
+                } catch (error) {
+                    hideLoader();
+                    showNotification('Failed to create account. Please try again.', 'error');
+                }
+
+            } else {
+                // Sign In Process
+                
+                if (!password) {
+                    showFieldError('password', 'Please enter your password');
+                    return;
+                }
+
+                // Show loading
+                showLoader('Signing you in...');
+
+                try {
+                    // Simulate server delay
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+
+                    // Check if user exists
+                    const user = getUserFromServer(email);
+                    if (!user) {
+                        hideLoader();
+                        showFieldError('email', 'No account found with this email. Please sign up first.');
+                        return;
+                    }
+
+                    // Verify password
+                    const isPasswordValid = await verifyPassword(password, user.passwordHash);
+                    if (!isPasswordValid) {
+                        hideLoader();
+                        showFieldError('password', 'Incorrect password. Please try again.');
+                        return;
+                    }
+
+                    // Check if account is active
+                    if (!user.isActive) {
+                        hideLoader();
+                        showNotification('Your account has been deactivated. Please contact support.', 'error');
+                        return;
+                    }
+
+                    // Update last login
+                    user.lastLogin = new Date().toISOString();
+                    const users = JSON.parse(localStorage.getItem('bomassUsers') || '[]');
+                    const userIndex = users.findIndex(u => u.id === user.id);
+                    if (userIndex !== -1) {
+                        users[userIndex] = user;
+                        localStorage.setItem('bomassUsers', JSON.stringify(users));
+                    }
+
+                    // Create session user (without password hash)
+                    const sessionUser = {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        joinDate: user.joinDate,
+                        profile: user.profile,
+                        lastLogin: user.lastLogin
+                    };
+
+                    currentUser = sessionUser;
+                    localStorage.setItem('bomassUser', JSON.stringify(sessionUser));
+                    
+                    hideLoader();
+                    updateAuthUI();
+                    closeModal('authModal');
+                    showNotification(`Welcome back, ${user.name}!`, 'success');
+
+                    // Add admin notification for user login
+                    addAdminNotification('user_login', {
+                        type: 'user_login',
+                        userId: user.id,
+                        userName: user.name,
+                        userEmail: user.email,
+                        message: `User logged in: ${user.name} (${user.email})`,
+                        timestamp: new Date().toISOString()
+                    });
+
+                } catch (error) {
+                    hideLoader();
+                    showNotification('Failed to sign in. Please try again.', 'error');
                 }
             }
 
-            // Simulate authentication (in real app, this would be an API call)
-            const user = {
-                id: Date.now(),
-                name: fullName || email.split('@')[0],
-                email: email,
-                joinDate: new Date().toISOString()
-            };
-
-            currentUser = user;
-            localStorage.setItem('bomassUser', JSON.stringify(user));
-            
-            updateAuthUI();
-            closeModal('authModal');
-            showNotification(`Welcome ${user.name}!`, 'success');
+            // Clear form
+            document.getElementById('authForm').reset();
         }
 
         function toggleMobileMenu() {
@@ -3069,6 +3447,383 @@ html lang="en">
             showNotification('All notifications marked as read', 'success');
         }
 
+        // Forgot Password Functions
+        let currentResetEmail = '';
+        let generatedOtp = '';
+        let resendTimer = null;
+
+        function showForgotPassword() {
+            closeModal('authModal');
+            document.getElementById('forgotPasswordModal').classList.remove('hidden');
+            resetForgotPasswordForm();
+        }
+
+        function resetForgotPasswordForm() {
+            // Reset to step 1
+            document.getElementById('forgotPasswordStep1').classList.remove('hidden');
+            document.getElementById('forgotPasswordStep2').classList.add('hidden');
+            document.getElementById('forgotPasswordStep3').classList.add('hidden');
+            
+            // Clear forms
+            document.getElementById('forgotPasswordForm').reset();
+            document.getElementById('verifyOtpForm').reset();
+            document.getElementById('resetPasswordForm').reset();
+            
+            // Clear OTP inputs
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`otp${i}`).value = '';
+                document.getElementById(`otp${i}`).classList.remove('border-red-500');
+            }
+            
+            // Reset variables
+            currentResetEmail = '';
+            generatedOtp = '';
+            
+            // Clear timers
+            if (resendTimer) {
+                clearInterval(resendTimer);
+                resendTimer = null;
+            }
+            
+            // Reset UI elements
+            document.getElementById('forgotPasswordTitle').textContent = 'Reset Password';
+            document.getElementById('forgotPasswordSubtitle').textContent = 'Enter your email to receive a reset code';
+            document.getElementById('resendBtn').classList.remove('hidden');
+            document.getElementById('resendTimer').classList.add('hidden');
+        }
+
+        function backToSignIn() {
+            closeModal('forgotPasswordModal');
+            showAuthModal();
+        }
+
+        async function handleForgotPassword(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('forgotEmail').value.trim();
+            
+            // Clear previous errors
+            document.getElementById('forgotEmail').classList.remove('border-red-500');
+            
+            // Validate email
+            if (!validateEmail(email)) {
+                document.getElementById('forgotEmail').classList.add('border-red-500');
+                showNotification('Please enter a valid email address', 'warning');
+                return;
+            }
+            
+            // Check if user exists
+            const user = getUserFromServer(email);
+            if (!user) {
+                document.getElementById('forgotEmail').classList.add('border-red-500');
+                showNotification('No account found with this email address', 'error');
+                return;
+            }
+            
+            // Show loading
+            showButtonLoader('sendOtpBtn', 'sendOtpSpinner');
+            
+            try {
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Generate 6-digit OTP
+                generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+                currentResetEmail = email;
+                
+                // Simulate sending OTP (in real app, this would call SMS/Email API)
+                console.log(`OTP for ${email}: ${generatedOtp}`); // For demo purposes
+                
+                // Store OTP with expiration (5 minutes)
+                const otpData = {
+                    email: email,
+                    otp: generatedOtp,
+                    expires: Date.now() + (5 * 60 * 1000), // 5 minutes
+                    attempts: 0
+                };
+                localStorage.setItem('bomassPasswordResetOtp', JSON.stringify(otpData));
+                
+                hideButtonLoader('sendOtpBtn', 'sendOtpSpinner');
+                
+                // Move to step 2
+                document.getElementById('forgotPasswordStep1').classList.add('hidden');
+                document.getElementById('forgotPasswordStep2').classList.remove('hidden');
+                
+                // Update UI
+                document.getElementById('forgotPasswordTitle').textContent = 'Verify Your Identity';
+                document.getElementById('forgotPasswordSubtitle').textContent = 'Enter the verification code we sent';
+                document.getElementById('maskedEmail').textContent = maskEmail(email);
+                
+                // Focus first OTP input
+                document.getElementById('otp1').focus();
+                
+                // Start resend timer
+                startResendTimer();
+                
+                // Show success notification with OTP (for demo)
+                showNotification(`Verification code sent! Demo OTP: ${generatedOtp}`, 'success');
+                
+            } catch (error) {
+                hideButtonLoader('sendOtpBtn', 'sendOtpSpinner');
+                showNotification('Failed to send verification code. Please try again.', 'error');
+            }
+        }
+
+        function maskEmail(email) {
+            const [username, domain] = email.split('@');
+            const maskedUsername = username.length > 2 
+                ? username[0] + '*'.repeat(username.length - 2) + username[username.length - 1]
+                : username[0] + '*';
+            return `${maskedUsername}@${domain}`;
+        }
+
+        function startResendTimer() {
+            let timeLeft = 60;
+            document.getElementById('resendBtn').classList.add('hidden');
+            document.getElementById('resendTimer').classList.remove('hidden');
+            document.getElementById('timerCount').textContent = timeLeft;
+            
+            resendTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timerCount').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(resendTimer);
+                    document.getElementById('resendBtn').classList.remove('hidden');
+                    document.getElementById('resendTimer').classList.add('hidden');
+                }
+            }, 1000);
+        }
+
+        function moveToNext(current, nextId) {
+            if (current.value.length === 1 && nextId) {
+                document.getElementById(nextId).focus();
+            }
+            
+            // Auto-submit when all fields are filled
+            if (current.id === 'otp6' && current.value.length === 1) {
+                const allFilled = Array.from({length: 6}, (_, i) => 
+                    document.getElementById(`otp${i + 1}`).value
+                ).every(val => val.length === 1);
+                
+                if (allFilled) {
+                    setTimeout(() => {
+                        document.getElementById('verifyOtpForm').dispatchEvent(new Event('submit'));
+                    }, 100);
+                }
+            }
+        }
+
+        function moveToPrev(current, prevId) {
+            if (event.key === 'Backspace' && current.value.length === 0 && prevId) {
+                document.getElementById(prevId).focus();
+            }
+        }
+
+        async function resendOtp() {
+            if (!currentResetEmail) return;
+            
+            try {
+                // Generate new OTP
+                generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+                
+                // Update stored OTP
+                const otpData = {
+                    email: currentResetEmail,
+                    otp: generatedOtp,
+                    expires: Date.now() + (5 * 60 * 1000),
+                    attempts: 0
+                };
+                localStorage.setItem('bomassPasswordResetOtp', JSON.stringify(otpData));
+                
+                console.log(`New OTP for ${currentResetEmail}: ${generatedOtp}`); // For demo
+                
+                // Start timer again
+                startResendTimer();
+                
+                showNotification(`New verification code sent! Demo OTP: ${generatedOtp}`, 'success');
+                
+            } catch (error) {
+                showNotification('Failed to resend code. Please try again.', 'error');
+            }
+        }
+
+        async function handleOtpVerification(e) {
+            e.preventDefault();
+            
+            // Get entered OTP
+            const enteredOtp = Array.from({length: 6}, (_, i) => 
+                document.getElementById(`otp${i + 1}`).value
+            ).join('');
+            
+            // Clear previous errors
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`otp${i}`).classList.remove('border-red-500');
+            }
+            
+            if (enteredOtp.length !== 6) {
+                for (let i = 1; i <= 6; i++) {
+                    if (!document.getElementById(`otp${i}`).value) {
+                        document.getElementById(`otp${i}`).classList.add('border-red-500');
+                    }
+                }
+                showNotification('Please enter the complete 6-digit code', 'warning');
+                return;
+            }
+            
+            // Show loading
+            showButtonLoader('verifyOtpBtn', 'verifyOtpSpinner');
+            
+            try {
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Get stored OTP data
+                const otpData = JSON.parse(localStorage.getItem('bomassPasswordResetOtp') || '{}');
+                
+                // Check if OTP exists and hasn't expired
+                if (!otpData.otp || Date.now() > otpData.expires) {
+                    hideButtonLoader('verifyOtpBtn', 'verifyOtpSpinner');
+                    showNotification('Verification code has expired. Please request a new one.', 'error');
+                    return;
+                }
+                
+                // Check attempts (max 3)
+                if (otpData.attempts >= 3) {
+                    hideButtonLoader('verifyOtpBtn', 'verifyOtpSpinner');
+                    showNotification('Too many failed attempts. Please request a new code.', 'error');
+                    return;
+                }
+                
+                // Verify OTP
+                if (enteredOtp !== otpData.otp) {
+                    // Increment attempts
+                    otpData.attempts++;
+                    localStorage.setItem('bomassPasswordResetOtp', JSON.stringify(otpData));
+                    
+                    hideButtonLoader('verifyOtpBtn', 'verifyOtpSpinner');
+                    
+                    // Highlight incorrect fields
+                    for (let i = 1; i <= 6; i++) {
+                        document.getElementById(`otp${i}`).classList.add('border-red-500');
+                    }
+                    
+                    const attemptsLeft = 3 - otpData.attempts;
+                    showNotification(`Incorrect code. ${attemptsLeft} attempts remaining.`, 'error');
+                    return;
+                }
+                
+                hideButtonLoader('verifyOtpBtn', 'verifyOtpSpinner');
+                
+                // Move to step 3
+                document.getElementById('forgotPasswordStep2').classList.add('hidden');
+                document.getElementById('forgotPasswordStep3').classList.remove('hidden');
+                
+                // Update UI
+                document.getElementById('forgotPasswordTitle').textContent = 'Create New Password';
+                document.getElementById('forgotPasswordSubtitle').textContent = 'Enter your new secure password';
+                
+                // Focus new password field
+                document.getElementById('newPassword').focus();
+                
+                showNotification('Code verified successfully!', 'success');
+                
+            } catch (error) {
+                hideButtonLoader('verifyOtpBtn', 'verifyOtpSpinner');
+                showNotification('Verification failed. Please try again.', 'error');
+            }
+        }
+
+        async function handlePasswordReset(e) {
+            e.preventDefault();
+            
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+            
+            // Clear previous errors
+            document.getElementById('newPassword').classList.remove('border-red-500');
+            document.getElementById('confirmNewPassword').classList.remove('border-red-500');
+            
+            // Validate new password
+            const passwordValidation = validatePassword(newPassword);
+            if (!passwordValidation.isValid) {
+                document.getElementById('newPassword').classList.add('border-red-500');
+                showNotification(passwordValidation.errors[0], 'warning');
+                return;
+            }
+            
+            // Check password confirmation
+            if (newPassword !== confirmPassword) {
+                document.getElementById('confirmNewPassword').classList.add('border-red-500');
+                showNotification('Passwords do not match', 'warning');
+                return;
+            }
+            
+            // Show loading
+            showButtonLoader('resetPasswordBtn', 'resetPasswordSpinner');
+            
+            try {
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Hash new password
+                const hashedPassword = await hashPassword(newPassword);
+                
+                // Update user password in storage
+                const users = JSON.parse(localStorage.getItem('bomassUsers') || '[]');
+                const userIndex = users.findIndex(u => u.email.toLowerCase() === currentResetEmail.toLowerCase());
+                
+                if (userIndex !== -1) {
+                    users[userIndex].passwordHash = hashedPassword;
+                    users[userIndex].lastPasswordReset = new Date().toISOString();
+                    localStorage.setItem('bomassUsers', JSON.stringify(users));
+                    
+                    // Clear OTP data
+                    localStorage.removeItem('bomassPasswordResetOtp');
+                    
+                    hideButtonLoader('resetPasswordBtn', 'resetPasswordSpinner');
+                    
+                    // Close modal and show success
+                    closeModal('forgotPasswordModal');
+                    showPasswordResetSuccess();
+                    
+                    // Add admin notification
+                    addAdminNotification('password_reset', {
+                        type: 'password_reset',
+                        userEmail: currentResetEmail,
+                        message: `Password reset completed for ${currentResetEmail}`,
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                } else {
+                    hideButtonLoader('resetPasswordBtn', 'resetPasswordSpinner');
+                    showNotification('User not found. Please try again.', 'error');
+                }
+                
+            } catch (error) {
+                hideButtonLoader('resetPasswordBtn', 'resetPasswordSpinner');
+                showNotification('Failed to reset password. Please try again.', 'error');
+            }
+        }
+
+        function showPasswordResetSuccess() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-50 modal-backdrop';
+            modal.innerHTML = `
+                <div class="flex items-center justify-center min-h-screen p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+                        <div class="text-6xl mb-4">🎉</div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Password Reset Successful!</h2>
+                        <p class="text-gray-600 mb-6">Your password has been updated successfully. You can now sign in with your new password.</p>
+                        <button onclick="this.closest('.modal-backdrop').remove(); showAuthModal();" class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                            Sign In Now
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
         // Helper functions for orders and donations
         function trackOrder(orderId) {
             showNotification(`Tracking order ${orderId}. You'll receive SMS updates!`, 'info');
@@ -3191,5 +3946,5 @@ html lang="en">
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976791323347a289',t:'MTc1NjQyMzUxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9767ae7b41999f05',t:'MTc1NjQyNDcxOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
